@@ -76,9 +76,9 @@ namespace PhotoNostalgia
             {
                 int length = pictureDisplay1.ImageLocation.Length;
                 string path = Path.GetFileName(pictureDisplay1.ImageLocation);
-                if (Form1.tagDatabase.ContainsKey(path))
+                if (Form1.TagDatabase.ContainsKey(path))
                 {
-                    string[] tags = Form1.tagDatabase[path];
+                    string[] tags = Form1.TagDatabase[path];
                     foreach (string tag in tags)
                     {
                         tagsBox1.Text += tag + ", ";
@@ -96,16 +96,34 @@ namespace PhotoNostalgia
             string[] tags = tagBlob.Split(delim, StringSplitOptions.RemoveEmptyEntries);
             if (tags.Length == 0)
             {
-                DialogResult result = MessageBox.Show("Are you sure you want to remove tags on this image?", "Confimation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                //TODO: localize all'at
+                DialogResult result = MessageBox.Show("Are you sure you want to remove tags on this image?",
+                    "Confimation",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2);
                 if (result == DialogResult.Yes)
                 {
-                    Form1.tagDatabase.Remove(Path.GetFileName(pictureDisplay1.ImageLocation));
-                    MessageBox.Show("Deleted Tags!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    Form1.TagDatabase.Remove(Path.GetFileName(pictureDisplay1.ImageLocation));
+                    MessageBox.Show("Deleted Tags!",
+                        "Alert",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning,
+                        MessageBoxDefaultButton.Button1);
                 }
             }
             else
             {
-                Form1.tagDatabase[Path.GetFileName(pictureDisplay1.ImageLocation)] = tags;
+                //TODO: localize
+                DialogResult result = MessageBox.Show("Are you sure you want to apply the following tags?" + tagBlob.Trim(),
+                    "Confimation",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.Yes)
+                {
+                    Form1.TagDatabase[Path.GetFileName(pictureDisplay1.ImageLocation)] = tags;
+                }
             }
             Form1.SaveDatabase();
         }
