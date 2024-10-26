@@ -68,6 +68,8 @@ namespace PhotoNostalgia.Forms
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            resourceManager = new ResourceManager("PhotoNostalgia.Forms.Form1", typeof(Program).Assembly);
+
             if (photoPath == null || !Directory.Exists(photoPath))
             {
                 DialogResult result = MessageBox.Show(
@@ -152,8 +154,6 @@ namespace PhotoNostalgia.Forms
                     }
                 }
             }
-
-            resourceManager = new ResourceManager("PhotoNostalgia.Forms.Form1", typeof(Program).Assembly);
 
             UpdateTagButtons();
             UpdatePictureGrid();
