@@ -1,4 +1,4 @@
-﻿namespace PhotoNostalgia
+﻿namespace PhotoNostalgia.Forms
 {
     partial class Form1
     {
@@ -29,13 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.tag6 = new System.Windows.Forms.CheckBox();
-            this.tag5 = new System.Windows.Forms.CheckBox();
-            this.tag4 = new System.Windows.Forms.CheckBox();
-            this.tag3 = new System.Windows.Forms.CheckBox();
-            this.tag2 = new System.Windows.Forms.CheckBox();
-            this.tag1 = new System.Windows.Forms.CheckBox();
             this.firstPageButton1 = new System.Windows.Forms.Button();
             this.lastPageButton1 = new System.Windows.Forms.Button();
             this.prevPageButton1 = new System.Windows.Forms.Button();
@@ -46,6 +39,8 @@
             this.tagSelectorLabel1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllPictureViewersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.checkForUpdatesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +60,8 @@
             this.photoBox4 = new System.Windows.Forms.PictureBox();
             this.photoBox3 = new System.Windows.Forms.PictureBox();
             this.photoBox2 = new System.Windows.Forms.PictureBox();
-            this.panel1.SuspendLayout();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.noTagsFoundLabel1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.selectNumeric1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.photoBox1)).BeginInit();
@@ -75,57 +71,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.photoBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.photoBox2)).BeginInit();
             this.SuspendLayout();
-            // 
-            // panel1
-            // 
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Controls.Add(this.tag6);
-            this.panel1.Controls.Add(this.tag5);
-            this.panel1.Controls.Add(this.tag4);
-            this.panel1.Controls.Add(this.tag3);
-            this.panel1.Controls.Add(this.tag2);
-            this.panel1.Controls.Add(this.tag1);
-            this.panel1.Name = "panel1";
-            // 
-            // tag6
-            // 
-            resources.ApplyResources(this.tag6, "tag6");
-            this.tag6.Name = "tag6";
-            this.tag6.UseVisualStyleBackColor = true;
-            // 
-            // tag5
-            // 
-            resources.ApplyResources(this.tag5, "tag5");
-            this.tag5.Name = "tag5";
-            this.tag5.UseVisualStyleBackColor = true;
-            // 
-            // tag4
-            // 
-            resources.ApplyResources(this.tag4, "tag4");
-            this.tag4.Name = "tag4";
-            this.tag4.UseVisualStyleBackColor = true;
-            this.tag4.CheckedChanged += new System.EventHandler(this.tagButton_Click);
-            // 
-            // tag3
-            // 
-            resources.ApplyResources(this.tag3, "tag3");
-            this.tag3.Name = "tag3";
-            this.tag3.UseVisualStyleBackColor = true;
-            this.tag3.CheckedChanged += new System.EventHandler(this.tagButton_Click);
-            // 
-            // tag2
-            // 
-            resources.ApplyResources(this.tag2, "tag2");
-            this.tag2.Name = "tag2";
-            this.tag2.UseVisualStyleBackColor = true;
-            this.tag2.CheckedChanged += new System.EventHandler(this.tagButton_Click);
-            // 
-            // tag1
-            // 
-            resources.ApplyResources(this.tag1, "tag1");
-            this.tag1.Name = "tag1";
-            this.tag1.UseVisualStyleBackColor = true;
-            this.tag1.CheckedChanged += new System.EventHandler(this.tagButton_Click);
             // 
             // firstPageButton1
             // 
@@ -202,6 +147,8 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeAllPictureViewersToolStripMenuItem,
+            this.toolStripSeparator3,
             this.checkForUpdatesToolStripMenuItem1,
             this.checkForUpdatesToolStripMenuItem,
             this.languageToolStripMenuItem,
@@ -209,6 +156,17 @@
             this.aboutToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             resources.ApplyResources(this.settingsToolStripMenuItem, "settingsToolStripMenuItem");
+            // 
+            // closeAllPictureViewersToolStripMenuItem
+            // 
+            this.closeAllPictureViewersToolStripMenuItem.Name = "closeAllPictureViewersToolStripMenuItem";
+            resources.ApplyResources(this.closeAllPictureViewersToolStripMenuItem, "closeAllPictureViewersToolStripMenuItem");
+            this.closeAllPictureViewersToolStripMenuItem.Click += new System.EventHandler(this.closeAllPictureViewersToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
             // checkForUpdatesToolStripMenuItem1
             // 
@@ -232,15 +190,17 @@
             // 
             // englishToolStripMenuItem1
             // 
-            this.englishToolStripMenuItem1.Name = "englishToolStripMenuItem1";
+            this.englishToolStripMenuItem1.Image = global::PhotoNostalgia.Properties.Resources.en;
             resources.ApplyResources(this.englishToolStripMenuItem1, "englishToolStripMenuItem1");
+            this.englishToolStripMenuItem1.Name = "englishToolStripMenuItem1";
             this.englishToolStripMenuItem1.Tag = "en";
             this.englishToolStripMenuItem1.Click += new System.EventHandler(this.languageToolStripMenuItem_Click);
             // 
             // spanishToolStripMenuItem1
             // 
-            this.spanishToolStripMenuItem1.Name = "spanishToolStripMenuItem1";
+            this.spanishToolStripMenuItem1.Image = global::PhotoNostalgia.Properties.Resources.es;
             resources.ApplyResources(this.spanishToolStripMenuItem1, "spanishToolStripMenuItem1");
+            this.spanishToolStripMenuItem1.Name = "spanishToolStripMenuItem1";
             this.spanishToolStripMenuItem1.Tag = "es";
             this.spanishToolStripMenuItem1.Click += new System.EventHandler(this.languageToolStripMenuItem_Click);
             // 
@@ -337,10 +297,22 @@
             this.photoBox2.TabStop = false;
             this.photoBox2.DoubleClick += new System.EventHandler(this.pictureBox_DoubleClick);
             // 
+            // flowLayoutPanel1
+            // 
+            resources.ApplyResources(this.flowLayoutPanel1, "flowLayoutPanel1");
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            // 
+            // noTagsFoundLabel1
+            // 
+            resources.ApplyResources(this.noTagsFoundLabel1, "noTagsFoundLabel1");
+            this.noTagsFoundLabel1.Name = "noTagsFoundLabel1";
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.noTagsFoundLabel1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.tagSelectorLabel1);
             this.Controls.Add(this.photoBox1);
             this.Controls.Add(this.selectNumeric1);
@@ -355,7 +327,6 @@
             this.Controls.Add(this.photoBox4);
             this.Controls.Add(this.photoBox3);
             this.Controls.Add(this.photoBox2);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
@@ -363,8 +334,6 @@
             this.Name = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectNumeric1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -381,14 +350,11 @@
 
         #endregion
         private System.Windows.Forms.PictureBox photoBox1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox photoBox2;
         private System.Windows.Forms.PictureBox photoBox3;
         private System.Windows.Forms.PictureBox photoBox6;
         private System.Windows.Forms.PictureBox photoBox5;
         private System.Windows.Forms.PictureBox photoBox4;
-        private System.Windows.Forms.CheckBox tag1;
-        private System.Windows.Forms.CheckBox tag2;
         private System.Windows.Forms.Button firstPageButton1;
         private System.Windows.Forms.Button lastPageButton1;
         private System.Windows.Forms.Button prevPageButton1;
@@ -396,11 +362,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown selectNumeric1;
         private System.Windows.Forms.Label maxPagesLabel1;
-        private System.Windows.Forms.CheckBox tag3;
-        private System.Windows.Forms.CheckBox tag4;
-        private System.Windows.Forms.CheckBox tag5;
         private System.Windows.Forms.Label tagSelectorLabel1;
-        private System.Windows.Forms.CheckBox tag6;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
@@ -416,6 +378,10 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem closeAllPictureViewersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label noTagsFoundLabel1;
     }
 }
 

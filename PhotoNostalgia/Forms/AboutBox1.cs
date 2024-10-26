@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PhotoNostalgia
+namespace PhotoNostalgia.Forms
 {
     partial class About : Form
     {
+        public static bool closed = false;
+
         public About()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            closed = false;
         }
 
         #region Assembly Attribute Accessors
@@ -45,19 +39,6 @@ namespace PhotoNostalgia
             get
             {
                 return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
-
-        public string AssemblyDescription
-        {
-            get
-            {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return "";
-                }
-                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
             }
         }
 
@@ -100,5 +81,11 @@ namespace PhotoNostalgia
             }
         }
         #endregion
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            closed = true;
+            this.Close();
+        }
     }
 }

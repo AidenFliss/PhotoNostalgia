@@ -1,4 +1,4 @@
-﻿namespace PhotoNostalgia
+﻿namespace PhotoNostalgia.Forms
 {
     partial class PictureViewer
     {
@@ -79,10 +79,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureDisplay1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox tagsBox1;
         private System.Windows.Forms.Button applyTagsButton1;
+        public System.Windows.Forms.PictureBox pictureDisplay1;
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Diagnostics;
 using System.Windows.Forms;
-using Octokit;
 using System.IO.Compression;
-using System.Runtime.InteropServices.WindowsRuntime; // Ensure this is added for ZipFile functionality
+using System.Threading.Tasks;
+using Octokit;
 
-namespace PhotoNostalgia
+namespace PhotoNostalgia.Classes
 {
     internal class AutoUpdater
     {
@@ -18,7 +17,7 @@ namespace PhotoNostalgia
         private static readonly string dbRepoName = "PhotoNostalgiaDatabase"; // Repo for the database.json file
         private static readonly string oldVersionFolder = "PhotoNostalgia_old"; // Folder for old versions
         private static readonly string workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        private static readonly DateTime currentVersion = new DateTime(2024, 10, 19); // Update as needed for releases
+        private static readonly DateTime currentVersion = new DateTime(2024, 10, 26); // Update as needed for releases
 
         private static GitHubClient githubClient = new GitHubClient(new ProductHeaderValue("PhotoNostalgiaUpdater"));
 
@@ -62,18 +61,33 @@ namespace PhotoNostalgia
             }
             else
             {
-                MessageBox.Show("No app updates available.", "No App Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //TODO: Localize
+                MessageBox.Show(
+                    "No app updates available.",
+                    "No App Update",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
 
             // If no app update, check for database update
             var dbUpdateResult = await DownloadDatabaseUpdateAsync();
             if (dbUpdateResult != null)
             {
-                MessageBox.Show("Database updated successfully.", "Database Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //TODO: Localize
+                MessageBox.Show(
+                    "Database updated successfully.",
+                    "Database Update",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show("No database updates available.", "No Database Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //TODO: Localize
+                MessageBox.Show(
+                    "No database updates available.",
+                    "No Database Update",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
         }
 
@@ -94,7 +108,12 @@ namespace PhotoNostalgia
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error checking for updates: {ex.Message}", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //TODO: Localize
+                MessageBox.Show(
+                    $"Error checking for updates: {ex.Message}",
+                    "Update Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
 
             return null; // No new updates
@@ -111,7 +130,12 @@ namespace PhotoNostalgia
                     var asset = latestRelease.Assets.FirstOrDefault(a => a.Name == "PhotoNostalgia.zip"); // Look for the .zip asset
                     if (asset == null)
                     {
-                        MessageBox.Show("No update ZIP file found in the latest release.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //TODO: Localize
+                        MessageBox.Show(
+                            "No update ZIP file found in the latest release.",
+                            "Update Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
                         return null;
                     }
 
@@ -121,16 +145,7 @@ namespace PhotoNostalgia
                     // Check if the update has already been downloaded
                     if (File.Exists(updateFilePath))
                     {
-                        DialogResult existingUpdatePrompt = MessageBox.Show(
-                            $"The new version ({latestRelease.TagName}) has already been downloaded! Would you like to launch it now?",
-                            "Update Ready",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-
-                        if (existingUpdatePrompt == DialogResult.Yes)
-                        {
-                            InstallUpdate(updateFilePath);
-                        }
+                        InstallUpdate(updateFilePath);
                         return updateFilePath;
                     }
 
@@ -138,14 +153,7 @@ namespace PhotoNostalgia
                     {
                         // Download the update
                         await webClient.DownloadFileTaskAsync(new Uri(downloadUrl), updateFilePath);
-                        MessageBox.Show("Update downloaded. Ready to install.", "Update Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Ask to install the update immediately
-                        DialogResult result = MessageBox.Show("Do you want to install the update now?", "Install Update", MessageBoxButtons.YesNo);
-                        if (result == DialogResult.Yes)
-                        {
-                            InstallUpdate(updateFilePath);
-                        }
+                        InstallUpdate(updateFilePath);
                     }
 
                     return updateFilePath;
@@ -153,7 +161,12 @@ namespace PhotoNostalgia
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error downloading update: {ex.Message}", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //TODO: Localize
+                MessageBox.Show(
+                    $"Error downloading update: {ex.Message}",
+                    "Update Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
 
             return null;
@@ -207,18 +220,24 @@ namespace PhotoNostalgia
                 Directory.Delete(extractPath, true); // Remove the new version folder
                 File.Delete(updateFilePath); // Remove the downloaded zip
 
-                MessageBox.Show("Update installed successfully!", "Update Installed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //TODO: Localize
+                MessageBox.Show(
+                    "Update installed successfully!",
+                    "Update Installed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-                // Prompt to launch the new version
-                DialogResult launchResult = MessageBox.Show("Do you want to launch the new version?", "Launch Update", MessageBoxButtons.YesNo);
-                if (launchResult == DialogResult.Yes)
-                {
-                    LaunchNewVersion();
-                }
+                
+                LaunchNewVersion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error installing update: {ex.Message}", "Install Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //TODO: Localize
+                MessageBox.Show(
+                    $"Error installing update: {ex.Message}",
+                    "Install Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -235,12 +254,22 @@ namespace PhotoNostalgia
                 }
                 else
                 {
-                    MessageBox.Show("Failed to launch new version: PhotoNostalgia.exe not found.", "Launch Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //TODO: Localize
+                    MessageBox.Show(
+                        "Failed to launch new version: PhotoNostalgia.exe not found.",
+                        "Launch Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error launching new version: {ex.Message}", "Launch Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //TODO: Localize
+                MessageBox.Show(
+                    $"Error launching new version: {ex.Message}",
+                    "Launch Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -255,7 +284,12 @@ namespace PhotoNostalgia
                 var asset = latestRelease.Assets.FirstOrDefault(a => a.Name == "database.json");
                 if (asset == null)
                 {
-                    MessageBox.Show("No database.json file found in the latest release.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //TODO: Localize
+                    MessageBox.Show(
+                        "No database.json file found in the latest release.",
+                        "Update Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                     return null;
                 }
 
@@ -285,7 +319,12 @@ namespace PhotoNostalgia
                 {
                     // Replace the old database file with the new one
                     File.Copy(latestDatabaseFile, databaseFilePath, overwrite: true);
-                    MessageBox.Show("Database updated successfully!", "Update Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //TODO: Localize
+                    MessageBox.Show(
+                        "Database updated successfully!",
+                        "Update Complete",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     return databaseFilePath;
                 }
 
@@ -293,7 +332,12 @@ namespace PhotoNostalgia
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error downloading database.json: {ex.Message}", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //TODO: Localize
+                MessageBox.Show(
+                    $"Error downloading database.json: {ex.Message}",
+                    "Update Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return null;
             }
         }

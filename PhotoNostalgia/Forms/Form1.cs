@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
+using System.Drawing;
+using System.Resources;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Globalization;
+using System.Collections.Generic;
+using PhotoNostalgia.Properties;
+using PhotoNostalgia.Classes;
 using Ookii.Dialogs.WinForms;
 using Newtonsoft.Json;
-using PhotoNostalgia.Properties;
-using System.Globalization;
-using System.Resources;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using Octokit;
 
-namespace PhotoNostalgia
+namespace PhotoNostalgia.Forms
 {
     public partial class Form1 : Form
     {
@@ -43,8 +40,9 @@ namespace PhotoNostalgia
         public static Dictionary<string, string[]> TagDatabase = new Dictionary<string, string[]>();
 
         VistaFolderBrowserDialog fbd;
-        PictureViewer pictureViewer = null;
         About aboutWindow = null;
+
+        List<PictureViewer> pictureViewers = new List<PictureViewer>();
 
         bool checkForUpdates = true;
         string photoPath;
@@ -56,24 +54,31 @@ namespace PhotoNostalgia
         int totalPages;
         int totalOffset;
 
+        static bool saving = false;
+
+        List<string> validTags = new List<string>();
         List<string> selectedTags = new List<string>();
 
         List<string> photoPaths = new List<string>();
         List<string> currentPhotos = new List<string>();
 
+        List<CheckBox> tagBoxes = new List<CheckBox>();
+
+        public ResourceManager resourceManager;
+
         private void Form1_Load(object sender, EventArgs e)
         {
             if (photoPath == null || !Directory.Exists(photoPath))
             {
-                //TODO: Localize.
-                DialogResult result = MessageBox.Show("Please select the \"FastFoto\" folder",
-                    "Select the Photo Folder.",
+                DialogResult result = MessageBox.Show(
+                    resourceManager.GetString("selectFolder"),
+                    resourceManager.GetString("selectFolderTitle"),
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Information,
                     MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.Cancel)
                 {
-                    Application.Exit();
+                    System.Windows.Forms.Application.Exit();
                     return;
                 }
 
@@ -86,14 +91,14 @@ namespace PhotoNostalgia
 
                     if (!Directory.Exists(fbd.SelectedPath) || fbd.SelectedPath == null)
                     {
-                        //TODO: Localize.
-                        DialogResult result2 = MessageBox.Show("Invalid Path!",
-                            "Error",
+                        DialogResult result2 = MessageBox.Show(
+                            resourceManager.GetString("invalidPath"),
+                            resourceManager.GetString("invalidPathTitle"),
                             MessageBoxButtons.OKCancel,
                             MessageBoxIcon.Error);
                         if (result2 == DialogResult.Cancel)
                         {
-                            Application.Exit();
+                            System.Windows.Forms.Application.Exit();
                             return;
                         }
                         continue;
@@ -131,21 +136,13 @@ namespace PhotoNostalgia
                 TagDatabase = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(data);
             }
 
-            CheckBox[] tagBoxes = { tag1, tag2, tag3, tag4, tag5, tag6 };
-
-            foreach (CheckBox tagCheckBox in tagBoxes)
-            {
-                tagCheckBox.Appearance = Appearance.Button;
-                tagCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            }
-
             ToolStripItemCollection languageItems = languageToolStripMenuItem.DropDownItems;
 
             foreach (ToolStripMenuItem languageItem in languageItems)
             {
                 string languageCode = (languageItem.Tag as string);
 
-                if (languageCode != null)
+                if (!String.IsNullOrEmpty(languageCode))
                 {
                     languageItem.Checked = false;
 
@@ -156,24 +153,24 @@ namespace PhotoNostalgia
                 }
             }
 
+            resourceManager = new ResourceManager("PhotoNostalgia.Forms.Form1", typeof(Program).Assembly);
+
+            UpdateTagButtons();
             UpdatePictureGrid();
         }
 
         void CheckForUpdates()
         {
-            var latestRelease = AutoUpdater.CheckForUpdates();
+            Release latestRelease = AutoUpdater.CheckForUpdates();
 
             if (latestRelease != null)
             {
                 string currentDir = AppDomain.CurrentDomain.BaseDirectory;
                 string oldVersionDir = Path.Combine(currentDir, "PhotoNostalgia_old");
-                string newVersionPath = Path.Combine(currentDir, $"PhotoNostalgia_v{latestRelease.TagName}.exe");
 
-                //TODO: Localize.
                 DialogResult updatePrompt = MessageBox.Show(
-                    //new ResourceManager.GetString("hi"),
-                    "A new update is available! Would you like to download it?",
-                    "Update Available",
+                    resourceManager.GetString("updateAvalible"),
+                    resourceManager.GetString("updateAvalibleTitle"),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Information);
 
@@ -209,13 +206,13 @@ namespace PhotoNostalgia
                         }
 
                         Process.Start(Path.Combine(currentDir, "PhotoNostalgia.exe"));
-                        Application.Exit();
+                        System.Windows.Forms.Application.Exit();
                     }
                     else
                     {
-                        //TODO: Localize.
-                        MessageBox.Show("Failed to download the update.",
-                            "Update Failed",
+                        MessageBox.Show(
+                            resourceManager.GetString("failUpdate"),
+                            resourceManager.GetString("failUpdateTitle"),
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                     }
@@ -252,6 +249,11 @@ namespace PhotoNostalgia
 
         void SaveSettings()
         {
+            if (saving)
+            {
+                return;
+            }
+            saving = true;
             PhotoNostalgiaSettings settings = new PhotoNostalgiaSettings();
 
             settings.Version = 1;
@@ -260,6 +262,7 @@ namespace PhotoNostalgia
             settings.Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
 
             File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(settings));
+            saving = false;
         }
 
         void CheckForDatabaseUpdate()
@@ -269,9 +272,9 @@ namespace PhotoNostalgia
 
             if (string.IsNullOrEmpty(latestDatabaseFile))
             {
-                //TODO: Localize.
-                MessageBox.Show("Database failed updating!",
-                    "Update Error",
+                MessageBox.Show(
+                    resourceManager.GetString("databaseFail"),
+                    resourceManager.GetString("databaseFailTitle"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -283,37 +286,102 @@ namespace PhotoNostalgia
             {
                 return;
             }
-            if (pictureViewer == null)
+            /*
+            foreach (PictureViewer view in pictureViewers)
             {
-                pictureViewer = new PictureViewer();
-                pictureViewer.PictureViewer_LoadImage((sender as PictureBox).ImageLocation, this);
-                pictureViewer.Show(this);
+                if (view.pictureDisplay1.ImageLocation == (sender as PictureBox).ImageLocation)
+                {
+                    return;
+                }
+            }
+            */
+            PictureViewer viewer = new PictureViewer();
+            pictureViewers.Add(viewer);
+            viewer.PictureViewer_LoadImage((sender as PictureBox).ImageLocation, this);
+            viewer.Show(this);
+        }
+
+        public void NullifyPictureViewer(PictureViewer viewer)
+        {
+            if (viewer != null)
+            {
+                pictureViewers.Remove(viewer);
             }
         }
 
-        public void NullifyPictureViewer()
+        public void UpdateTagButtons()
         {
-            pictureViewer = null;
+            string jsonText = File.ReadAllText(DatabaseLocation);
+            JObject data = JsonConvert.DeserializeObject<JObject>(jsonText);
+
+            HashSet<string> uniqueValues = new HashSet<string>();
+
+            foreach (CheckBox checkBox in tagBoxes)
+            {
+                checkBox.Dispose();
+            }
+
+            flowLayoutPanel1.Controls.Clear();
+
+            validTags.Clear();
+
+            foreach (var entry in data)
+            {
+                var values = entry.Value as JArray;
+                if (values != null)
+                {
+                    foreach (var value in values)
+                    {
+                        uniqueValues.Add(value.ToString());
+                    }
+                }
+            }
+
+            validTags = new List<string>(uniqueValues);
+            validTags.Sort((x, y) =>
+            {
+                bool isXNumeric = int.TryParse(x, out int numX);
+                bool isYNumeric = int.TryParse(y, out int numY);
+
+                if (isXNumeric && isYNumeric)
+                    return numX.CompareTo(numY);
+
+                if (isXNumeric) return -1;
+                if (isYNumeric) return 1;
+
+                return x.CompareTo(y);
+            });
+
+            foreach (string tag in validTags)
+            {
+                CheckBox tagButton = new CheckBox();
+                tagButton.Text = tag;
+                tagButton.Tag = tag;
+                tagButton.AutoSize = true;
+                tagButton.Font = new Font("Microsoft Sans Serif", 7F);
+                tagButton.MaximumSize = new Size(99999, 20);
+                tagButton.TextAlign = ContentAlignment.MiddleCenter;
+                tagButton.Appearance = Appearance.Button;
+                tagButton.Click += tagButton_Click;
+                flowLayoutPanel1.Controls.Add(tagButton);
+            }
+
+            noTagsFoundLabel1.Visible = validTags.Count == 0;
         }
 
         void UpdatePictureGrid()
         {
             PictureBox[] photoBoxes = { photoBox1, photoBox2, photoBox3, photoBox4, photoBox5, photoBox6 };
+            int photoCount = currentPhotos.Count;
+
             for (int i = 0; i < photoBoxes.Length; i++)
             {
                 int photoIndex = offset + i;
-                if (photoIndex < currentPhotos.Count)
+
+                if (photoIndex < photoCount)
                 {
-                    if (currentPhotos.Any())
-                    {
-                        photoBoxes[i].Tag = null;
-                        photoBoxes[i].ImageLocation = "file:///" + currentPhotos[photoIndex];
-                    }
-                    else
-                    {
-                        photoBoxes[i].Tag = "[IGNORE]";
-                        photoBoxes[i].Image = Resources.PlaceholderImage;
-                    }
+                    photoBoxes[i].Tag = null;
+                    photoBoxes[i].ImageLocation = "file:///" + currentPhotos[photoIndex];
                 }
                 else
                 {
@@ -321,36 +389,20 @@ namespace PhotoNostalgia
                     photoBoxes[i].Image = Resources.PlaceholderImage;
                 }
             }
-            totalPhotos = currentPhotos.Count;
+
+            totalPhotos = photoCount;
             totalPages = (int)Math.Ceiling(totalPhotos / 6.0);
             totalOffset = totalPages * 6;
-            maxPagesLabel1.Text = "/ " + totalPages;
-
             page = (offset / 6);
+
+            maxPagesLabel1.Text = "/ " + totalPages;
             selectNumeric1.Maximum = totalPages;
             selectNumeric1.Value = page + 1;
 
-            if (offset <= 0)
-            {
-                prevPageButton1.Enabled = false;
-                firstPageButton1.Enabled = false;
-            }
-            else
-            {
-                prevPageButton1.Enabled = true;
-                firstPageButton1.Enabled = true;
-            }
-
-            if (offset >= totalOffset - 6)
-            {
-                nextPageButton1.Enabled = false;
-                lastPageButton1.Enabled = false;
-            }
-            else
-            {
-                nextPageButton1.Enabled = true;
-                lastPageButton1.Enabled = true;
-            }
+            prevPageButton1.Enabled = offset > 0;
+            firstPageButton1.Enabled = offset > 0;
+            nextPageButton1.Enabled = offset < totalOffset - 6;
+            lastPageButton1.Enabled = offset < totalOffset - 6;
         }
 
         private void firstPageButton1_Click(object sender, EventArgs e)
@@ -393,66 +445,74 @@ namespace PhotoNostalgia
         private void tagButton_Click(object sender, EventArgs e)
         {
             CheckBox tagClicked = (sender as CheckBox);
-            string tag = tagClicked.Text;
+            string tag = (tagClicked.Tag as string);
+
             if (tagClicked.Checked)
             {
                 selectedTags.Add(tag);
-                currentPhotos.Clear();
-                foreach (string photo in photoPaths)
-                {
-                    if (!TagDatabase.ContainsKey(Path.GetFileName(photo)))
-                    {
-                        continue;
-                    }
-                    string[] imageTags = TagDatabase[Path.GetFileName(photo)];
-                    bool intersects = selectedTags.Intersect(imageTags).Any();
-                    if (intersects)
-                    {
-                        currentPhotos.Add(photo);
-                    }
-                }
-                UpdatePictureGrid();
             }
             else
             {
                 selectedTags.Remove(tag);
-                currentPhotos.Clear();
-                if (selectedTags.Count <= 0)
-                {
-                    foreach (string photo in photoPaths)
-                    {
-                        currentPhotos.Add(photo);
-                    }
-                    UpdatePictureGrid();
-                    return;
-                }
-                foreach (string photo in photoPaths)
-                {
-                    if (!TagDatabase.ContainsKey(Path.GetFileName(photo)))
-                    {
-                        continue;
-                    }
-                    string[] imageTags = TagDatabase[Path.GetFileName(photo)];
-                    bool intersects = selectedTags.Intersect(imageTags).Any();
-                    if (intersects)
-                    {
-                        currentPhotos.Add(photo);
-                    }
-                }
-                UpdatePictureGrid();
             }
+
+            currentPhotos.Clear();
+
+            if (selectedTags.Count == 0)
+            {
+                currentPhotos.AddRange(photoPaths);
+                UpdatePictureGrid();
+                return;
+            }
+
+            HashSet<string> selectedTagSet = new HashSet<string>(selectedTags);
+
+            foreach (string photo in photoPaths)
+            {
+                string fileName = Path.GetFileName(photo);
+
+                if (!TagDatabase.ContainsKey(fileName))
+                {
+                    continue;
+                }
+
+                string[] imageTags = TagDatabase[fileName];
+
+                bool intersects = selectedTagSet.All(tg => imageTags.Contains(tg));
+
+                if (intersects)
+                {
+                    currentPhotos.Add(photo);
+                }
+            }
+
+            offset = 0;
+
+            UpdatePictureGrid();
         }
 
         public static void SaveDatabase()
         {
+            if (saving == true)
+            {
+                return;
+            }
+            saving = true;
             string json = JsonConvert.SerializeObject(TagDatabase, Formatting.Indented);
             File.WriteAllText(DatabaseLocation, json);
+            saving = false;
         }
 
         public static void BackupDatabase()
         {
+            if (saving == true)
+            {
+                return;
+            }
+            saving = true;
             string json = JsonConvert.SerializeObject(TagDatabase, Formatting.Indented);
             File.WriteAllText(DatabaseBackupLocation, json);
+            saving = false;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -472,14 +532,19 @@ namespace PhotoNostalgia
             SaveSettings();
             Close();
 
-            Process.Start(Application.ExecutablePath, "-forceSkipUpdateCheck");
+            Process.Start(System.Windows.Forms.Application.ExecutablePath, "-forceSkipUpdateCheck");
         }
 
         private void languageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (sender as ToolStripMenuItem);
 
-            if (menuItem.Tag != null)
+            if (menuItem.Checked == true)
+            {
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(menuItem.Tag as string))
             {
                 SetCulture(menuItem.Tag.ToString());
             }
@@ -522,6 +587,17 @@ namespace PhotoNostalgia
         private void checkForUpdatesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             CheckForUpdates();
+        }
+
+        private void closeAllPictureViewersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (PictureViewer pictureViewer in pictureViewers)
+            {
+                pictureViewer.shouldRemoveSelf = false;
+                pictureViewer.Close();
+                pictureViewer.Dispose();
+            }
+            pictureViewers.Clear();
         }
     }
 }

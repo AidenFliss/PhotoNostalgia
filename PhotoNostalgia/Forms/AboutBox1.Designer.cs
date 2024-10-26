@@ -1,4 +1,4 @@
-﻿namespace PhotoNostalgia
+﻿namespace PhotoNostalgia.Forms
 {
     partial class About
     {
@@ -77,6 +77,7 @@
             resources.ApplyResources(this.okButton, "okButton");
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okButton.Name = "okButton";
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // pictureBox1
             // 

@@ -120,6 +120,9 @@
   <data name="checkBox1.Text" xml:space="preserve">
     <value>Enhancements</value>
   </data>
+  <data name="&gt;&gt;tagsBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="applyTagsButton1.Text" xml:space="preserve">
     <value>Apply Tags</value>
   </data>

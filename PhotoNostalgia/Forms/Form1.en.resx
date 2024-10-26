@@ -117,26 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="tag4.Text" xml:space="preserve">
-    <value>2000s</value>
+  <data name="firstPageButton1.Text" xml:space="preserve">
+    <value>&lt;&lt;</value>
   </data>
-  <data name="tagSelectorLabel1.Text" xml:space="preserve">
-    <value>Tag Selector:</value>
+  <data name="lastPageButton1.Text" xml:space="preserve">
+    <value>&gt;&gt;</value>
   </data>
-  <data name="toolStripMenuItem2.Text" xml:space="preserve">
-    <value>Language</value>
+  <data name="prevPageButton1.Text" xml:space="preserve">
+    <value>&lt;</value>
   </data>
-  <data name="englishToolStripMenuItem.Text" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="toolStripMenuItem3.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="tag6.Text" xml:space="preserve">
-    <value>Aiden</value>
-  </data>
-  <data name="tag2.Text" xml:space="preserve">
-    <value>1970s</value>
+  <data name="nextPageButton1.Text" xml:space="preserve">
+    <value>&gt;</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
     <value>Page:</value>
@@ -144,64 +135,106 @@
   <data name="maxPagesLabel1.Text" xml:space="preserve">
     <value>/ 500</value>
   </data>
-  <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="spanishToolStripMenuItem.Text" xml:space="preserve">
-    <value>Spanish</value>
-  </data>
-  <data name="spanishToolStripMenuItem1.Text" xml:space="preserve">
-    <value>Spanish</value>
-  </data>
-  <data name="tag5.Text" xml:space="preserve">
-    <value>Portrait</value>
-  </data>
-  <data name="tag3.Text" xml:space="preserve">
-    <value>1990s</value>
-  </data>
-  <data name="tag1.Text" xml:space="preserve">
-    <value>1930s</value>
-  </data>
-  <data name="nextPageButton1.Text" xml:space="preserve">
-    <value>&gt;</value>
-  </data>
-  <data name="toolStripMenuItem1.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="englishToolStripMenuItem1.Text" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="settingsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Photo Nostalgia</value>
-  </data>
-  <data name="prevPageButton1.Text" xml:space="preserve">
-    <value>&lt;</value>
+  <data name="tagSelectorLabel1.Text" xml:space="preserve">
+    <value>Tag Selector:</value>
   </data>
   <data name="menuStrip1.Text" xml:space="preserve">
     <value>menuStrip1</value>
   </data>
-  <data name="firstPageButton1.Text" xml:space="preserve">
-    <value>&lt;&lt;</value>
+  <data name="settingsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Settings</value>
   </data>
-  <data name="lastPageButton1.Text" xml:space="preserve">
-    <value>&gt;&gt;</value>
-  </data>
-  <data name="languageToolStripMenuItem.Text" xml:space="preserve">
-    <value>Language</value>
-  </data>
-  <data name="selectedPathLabel1.Text" xml:space="preserve">
-    <value>Selected Path: [NULL]</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>Tag Selector:</value>
+  <data name="closeAllPictureViewersToolStripMenuItem.Text" xml:space="preserve">
+    <value>Close All Picture Viewers</value>
   </data>
   <data name="checkForUpdatesToolStripMenuItem1.Text" xml:space="preserve">
     <value>Check For Updates...</value>
   </data>
   <data name="checkForUpdatesToolStripMenuItem.Text" xml:space="preserve">
     <value>Check For Updates On Start</value>
+  </data>
+  <data name="languageToolStripMenuItem.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="englishToolStripMenuItem1.Text" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="spanishToolStripMenuItem1.Text" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
+  <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="toolStripMenuItem2.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="englishToolStripMenuItem.Text" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="spanishToolStripMenuItem.Text" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
+  <data name="toolStripMenuItem3.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="noTagsFoundLabel1.Text" xml:space="preserve">
+    <value>No Images Tagged!</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Photo Nostalgia</value>
+  </data>
+  <data name="updateAvalible" xml:space="preserve">
+    <value>A new update is available! Would you like to download it?</value>
+  </data>
+  <data name="updateAvalibleTitle" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
+  <data name="selectFolder" xml:space="preserve">
+    <value>Please select the "FastFoto" folder</value>
+  </data>
+  <data name="selectFolderTitle" xml:space="preserve">
+    <value>Select the Photo Folder.</value>
+  </data>
+  <data name="invalidPath" xml:space="preserve">
+    <value>Invalid Path!</value>
+  </data>
+  <data name="invalidPathTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="failUpdate" xml:space="preserve">
+    <value>Failed to download the update.</value>
+  </data>
+  <data name="failUpdateTitle" xml:space="preserve">
+    <value>Update Failed</value>
+  </data>
+  <data name="databaseFail" xml:space="preserve">
+    <value>Database failed updating!</value>
+  </data>
+  <data name="databaseFailTitle" xml:space="preserve">
+    <value>Update Error</value>
+  </data>
+  <data name="applyConfirm" xml:space="preserve">
+    <value>Are you sure you want to apply the following tags?</value>
+  </data>
+  <data name="applyConfirmTitle" xml:space="preserve">
+    <value>Confimation</value>
+  </data>
+  <data name="deleteNotif" xml:space="preserve">
+    <value>Deleted Tags!</value>
+  </data>
+  <data name="deleteNotifTitle" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="confirmRemove" xml:space="preserve">
+    <value>Are you sure you want to remove tags on this image?</value>
+  </data>
+  <data name="confirmRemoveTitle" xml:space="preserve">
+    <value>Confimation</value>
+  </data>
+  <data name="windowTitle" xml:space="preserve">
+    <value>Picture Viewer</value>
   </data>
 </root>

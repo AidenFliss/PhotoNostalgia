@@ -118,28 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="labelProductName.Text" xml:space="preserve">
-    <value>Photo Espanol</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="labelProductName.TextAlign" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Foto Nostalgia</value>
   </data>
   <data name="labelVersion.Text" xml:space="preserve">
     <value>1.0</value>
-  </data>
-  <data name="labelVersion.TextAlign" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="labelCompanyName.Text" xml:space="preserve">
     <value>Aiden Fliss</value>
   </data>
   <data name="textBoxDescription.Text" xml:space="preserve">
-    <value>Descponlsl</value>
+    <value>Foto Nostalgia es una aplicación que te permite ver fotos respaldadas desde el Epson FastFoto. Te permite organizar imágenes con etiquetas y te muestra todas las imágenes etiquetadas con esas etiquetas.</value>
   </data>
   <data name="okButton.Text" xml:space="preserve">
-    <value>&amp;OK</value>
+    <value>Está bien</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Aout Elsps</value>
+    <value>Sobre</value>
   </data>
 </root>

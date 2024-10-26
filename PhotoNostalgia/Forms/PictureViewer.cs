@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PhotoNostalgia
+namespace PhotoNostalgia.Forms
 {
     public partial class PictureViewer : Form
     {
@@ -19,17 +12,18 @@ namespace PhotoNostalgia
         }
 
         Form1 mainWindow = null;
+        public bool shouldRemoveSelf = true;
 
         public void PictureViewer_LoadImage(string path, Form1 mainWindw)
         {
-            if (path != null)
-            {
-                pictureDisplay1.ImageLocation = path;
-                this.Text = "Picture Viewer [" + Path.GetFileName(path) + "]";
-            }
             if (mainWindw != null)
             {
                 mainWindow = mainWindw;
+            }
+            if (!String.IsNullOrEmpty(path))
+            {
+                pictureDisplay1.ImageLocation = path;
+                this.Text = mainWindw.resourceManager.GetString("windowTitle") + " [" + Path.GetFileName(path) + "]";
             }
             int length = pictureDisplay1.ImageLocation.Length;
             string noExt = pictureDisplay1.ImageLocation.Substring(0, length - 4);
@@ -46,9 +40,9 @@ namespace PhotoNostalgia
 
         private void PictureViewer_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (mainWindow != null)
+            if (mainWindow != null && shouldRemoveSelf == true)
             {
-                mainWindow.NullifyPictureViewer();
+                mainWindow.NullifyPictureViewer(this);
             }
         }
 
@@ -83,7 +77,7 @@ namespace PhotoNostalgia
                     {
                         tagsBox1.Text += tag + ", ";
                     }
-                    tagsBox1.Text = tagsBox1.Text.TrimEnd(new char[] { ',', ' '});
+                    tagsBox1.Text = tagsBox1.Text.TrimEnd(new char[] { ',', ' ' });
                 }
             }
         }
@@ -92,21 +86,22 @@ namespace PhotoNostalgia
         {
             string tagBlob = tagsBox1.Text;
             int length = pictureDisplay1.ImageLocation.Length;
-            char[] delim = {',', ' '};
+            char[] delim = {','};
             string[] tags = tagBlob.Split(delim, StringSplitOptions.RemoveEmptyEntries);
             if (tags.Length == 0)
             {
-                //TODO: localize all'at
-                DialogResult result = MessageBox.Show("Are you sure you want to remove tags on this image?",
-                    "Confimation",
+                DialogResult result = MessageBox.Show(
+                    mainWindow.resourceManager.GetString("confirmRemove"),
+                    mainWindow.resourceManager.GetString("confirmRemoveTitle"),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question,
                     MessageBoxDefaultButton.Button2);
                 if (result == DialogResult.Yes)
                 {
                     Form1.TagDatabase.Remove(Path.GetFileName(pictureDisplay1.ImageLocation));
-                    MessageBox.Show("Deleted Tags!",
-                        "Alert",
+                    MessageBox.Show(
+                        mainWindow.resourceManager.GetString("deleteNotif"),
+                        mainWindow.resourceManager.GetString("deleteNotifTitle"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning,
                         MessageBoxDefaultButton.Button1);
@@ -114,9 +109,9 @@ namespace PhotoNostalgia
             }
             else
             {
-                //TODO: localize
-                DialogResult result = MessageBox.Show("Are you sure you want to apply the following tags?" + tagBlob.Trim(),
-                    "Confimation",
+                DialogResult result = MessageBox.Show(
+                    mainWindow.resourceManager.GetString("applyConfirm") + " " + tagBlob,
+                    mainWindow.resourceManager.GetString("applyConfirmTitle"),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question,
                     MessageBoxDefaultButton.Button2);
@@ -126,6 +121,7 @@ namespace PhotoNostalgia
                 }
             }
             Form1.SaveDatabase();
+            mainWindow.UpdateTagButtons();
         }
     }
 }

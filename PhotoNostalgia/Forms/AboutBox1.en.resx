@@ -127,10 +127,10 @@
     <value>Aiden Fliss</value>
   </data>
   <data name="textBoxDescription.Text" xml:space="preserve">
-    <value>Description</value>
+    <value>Photo Nostalgia is an app that lets you view photos backed up from the Epson FastFoto. It lets you sort images with tags and shows you all images tagged with those tags.</value>
   </data>
   <data name="okButton.Text" xml:space="preserve">
-    <value>&amp;OK</value>
+    <value>Ok</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>About</value>
