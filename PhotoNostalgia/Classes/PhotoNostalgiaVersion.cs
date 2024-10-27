@@ -18,7 +18,6 @@ namespace PhotoNostalgia.Classes
             Description = "";
         }
 
-        [JsonConstructor]
         public PhotoNostalgiaVersion(string version, string dbVersion, string description)
         {
             Version = version;
