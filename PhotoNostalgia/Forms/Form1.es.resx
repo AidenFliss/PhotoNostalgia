@@ -180,6 +180,10 @@
   <data name="toolStripMenuItem3.Text" xml:space="preserve">
     <value>Acerca</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="&gt;&gt;photoBox1.Name" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="noTagsFoundLabel1.Text" xml:space="preserve">
     <value>¡No hay imágenes etiquetadas!</value>
   </data>
@@ -236,5 +240,17 @@
   </data>
   <data name="windowTitle" xml:space="preserve">
     <value>Visor de imágenes</value>
+  </data>
+  <data name="programName" xml:space="preserve">
+    <value>Foto Nostalgia</value>
+  </data>
+  <data name="downloadPrompt" xml:space="preserve">
+    <value>¿Deseas descargarlo?</value>
+  </data>
+  <data name="databaseSuccess" xml:space="preserve">
+    <value>¡Base de datos actualizada con éxito!</value>
+  </data>
+  <data name="databaseSuccessTitle" xml:space="preserve">
+    <value>¡Base de datos actualizada!</value>
   </data>
 </root>

@@ -180,6 +180,10 @@
   <data name="toolStripMenuItem3.Text" xml:space="preserve">
     <value>About</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="&gt;&gt;photoBox1.Name" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="noTagsFoundLabel1.Text" xml:space="preserve">
     <value>No Images Tagged!</value>
   </data>
@@ -236,5 +240,17 @@
   </data>
   <data name="windowTitle" xml:space="preserve">
     <value>Picture Viewer</value>
+  </data>
+  <data name="programName" xml:space="preserve">
+    <value>Photo Nostalgia</value>
+  </data>
+  <data name="downloadPrompt" xml:space="preserve">
+    <value>Do you wish to download it?</value>
+  </data>
+  <data name="databaseSuccess" xml:space="preserve">
+    <value>Database updated successfully!</value>
+  </data>
+  <data name="databaseSuccessTitle" xml:space="preserve">
+    <value>Database Updated!</value>
   </data>
 </root>

@@ -92,6 +92,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\PhotoNostalgiaVersion.cs" />
     <Compile Include="Forms\AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -202,6 +203,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\en.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FailedLoading.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PhotoNostalgiaVersion.json" />
   </ItemGroup>
   <Target Name="ILMerge">
     <!-- the ILMergePath property points to the location of ILMerge.exe console application -->

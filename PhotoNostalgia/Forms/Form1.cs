@@ -12,7 +12,6 @@ using PhotoNostalgia.Classes;
 using Ookii.Dialogs.WinForms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Octokit;
 
 namespace PhotoNostalgia.Forms
 {
@@ -26,7 +25,7 @@ namespace PhotoNostalgia.Forms
 
             if (settings.CheckForUpdatesOnStart && !args.Contains("-forceSkipUpdateCheck"))
             {
-                CheckForUpdates();
+                TryUpdate();
             }
 
             InitializeComponent();
@@ -80,7 +79,7 @@ namespace PhotoNostalgia.Forms
                     MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.Cancel)
                 {
-                    System.Windows.Forms.Application.Exit();
+                    Application.Exit();
                     return;
                 }
 
@@ -100,7 +99,7 @@ namespace PhotoNostalgia.Forms
                             MessageBoxIcon.Error);
                         if (result2 == DialogResult.Cancel)
                         {
-                            System.Windows.Forms.Application.Exit();
+                            Application.Exit();
                             return;
                         }
                         continue;
@@ -159,68 +158,21 @@ namespace PhotoNostalgia.Forms
             UpdatePictureGrid();
         }
 
-        void CheckForUpdates()
+        private async void TryUpdate()
         {
-            Release latestRelease = AutoUpdater.CheckForUpdates();
-
-            if (latestRelease != null)
+            if (await AutoUpdater.Update())
             {
-                string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-                string oldVersionDir = Path.Combine(currentDir, "PhotoNostalgia_old");
-
-                DialogResult updatePrompt = MessageBox.Show(
-                    resourceManager.GetString("updateAvalible"),
-                    resourceManager.GetString("updateAvalibleTitle"),
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information);
-
-                if (updatePrompt == DialogResult.Yes)
-                {
-                    string updatePath = AutoUpdater.DownloadLatestUpdate();
-
-                    if (!string.IsNullOrEmpty(updatePath))
-                    {
-                        if (!Directory.Exists(oldVersionDir))
-                        {
-                            Directory.CreateDirectory(oldVersionDir);
-                        }
-
-                        foreach (string file in Directory.GetFiles(currentDir))
-                        {
-                            string fileName = Path.GetFileName(file);
-                            string destFile = Path.Combine(oldVersionDir, fileName);
-
-                            if (File.Exists(destFile))
-                            {
-                                File.Delete(destFile);
-                            }
-
-                            File.Move(file, destFile);
-                        }
-
-                        foreach (string file in Directory.GetFiles(updatePath))
-                        {
-                            string fileName = Path.GetFileName(file);
-                            string destFile = Path.Combine(currentDir, fileName);
-                            File.Move(file, destFile);
-                        }
-
-                        Process.Start(Path.Combine(currentDir, "PhotoNostalgia.exe"));
-                        System.Windows.Forms.Application.Exit();
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            resourceManager.GetString("failUpdate"),
-                            resourceManager.GetString("failUpdateTitle"),
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                    }
-                }
+                Close();
+                Process.Start(Path.Combine(Application.StartupPath, "PhotoNostalgia.exe"), "-forceSkipUpdateCheck");
             }
-            else
+        }
+
+        async void CheckForDatabaseUpdate()
+        {
+            if (await AutoUpdater.UpdateDB())
             {
-                CheckForDatabaseUpdate();
+                Close();
+                Process.Start(Path.Combine(Application.StartupPath, "PhotoNostalgia.exe"));
             }
         }
 
@@ -263,21 +215,6 @@ namespace PhotoNostalgia.Forms
 
             File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(settings));
             saving = false;
-        }
-
-        void CheckForDatabaseUpdate()
-        {
-            string workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string latestDatabaseFile = AutoUpdater.DownloadDatabaseUpdate();
-
-            if (string.IsNullOrEmpty(latestDatabaseFile))
-            {
-                MessageBox.Show(
-                    resourceManager.GetString("databaseFail"),
-                    resourceManager.GetString("databaseFailTitle"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
         }
 
         private void pictureBox_DoubleClick(object sender, EventArgs e)
@@ -532,7 +469,7 @@ namespace PhotoNostalgia.Forms
             SaveSettings();
             Close();
 
-            Process.Start(System.Windows.Forms.Application.ExecutablePath, "-forceSkipUpdateCheck");
+            Process.Start(Application.ExecutablePath, "-forceSkipUpdateCheck");
         }
 
         private void languageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -586,7 +523,8 @@ namespace PhotoNostalgia.Forms
 
         private void checkForUpdatesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            CheckForUpdates();
+            TryUpdate();
+            CheckForDatabaseUpdate();
         }
 
         private void closeAllPictureViewersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -598,6 +536,31 @@ namespace PhotoNostalgia.Forms
                 pictureViewer.Dispose();
             }
             pictureViewers.Clear();
+        }
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            PictureBox pictureBox = (sender as PictureBox);
+            string tag = (pictureBox.Tag as string);
+
+            if (!String.IsNullOrEmpty(tag))
+            {
+                if (File.Exists(tag))
+                {
+                    pictureBox.Image = Resources.PlaceholderImage;
+                    pictureBox.ImageLocation = "file:///" + tag;
+                }
+            }
+        }
+
+        private void pictureBox_LoadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                PictureBox pictureBox = (sender as PictureBox);
+                pictureBox.Tag = pictureBox.ImageLocation;
+                pictureBox.Image = Resources.FailedLoading;
+            }
         }
     }
 }

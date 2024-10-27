@@ -387,9 +387,9 @@
   <data name="&gt;&gt;tagSelectorLabel1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>17, 17</value>
-  </metadata>
+  </data>
   <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -795,12 +795,12 @@
   <data name="&gt;&gt;noTagsFoundLabel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="$this.Localizable" type="System.Boolean, mscorlib">
     <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  </data>
+  <data name="$this.TrayHeight" type="System.Int32, mscorlib">
     <value>25</value>
-  </metadata>
+  </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 17</value>
   </data>
@@ -934,5 +934,71 @@
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="updateAvalible" xml:space="preserve">
+    <value />
+  </data>
+  <data name="updateAvalibleTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="selectFolder" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="selectFolderTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="invalidPath" xml:space="preserve">
+    <value />
+  </data>
+  <data name="invalidPathTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="failUpdate" xml:space="preserve">
+    <value>Failed to download the update.</value>
+  </data>
+  <data name="failUpdateTitle" xml:space="preserve">
+    <value>Update Failed</value>
+  </data>
+  <data name="databaseFail" xml:space="preserve">
+    <value>Database failed updating!</value>
+  </data>
+  <data name="databaseFailTitle" xml:space="preserve">
+    <value>Update Error</value>
+  </data>
+  <data name="applyConfirm" xml:space="preserve">
+    <value />
+  </data>
+  <data name="applyConfirmTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="deleteNotif" xml:space="preserve">
+    <value />
+  </data>
+  <data name="deleteNotifTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="confirmRemove" xml:space="preserve">
+    <value />
+  </data>
+  <data name="confirmRemoveTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="windowTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="noTagsFoundLabel1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="programName" xml:space="preserve">
+    <value>Photo Nostalgia</value>
+  </data>
+  <data name="downloadPrompt" xml:space="preserve">
+    <value>Do you wish to download it?</value>
+  </data>
+  <data name="databaseSuccess" xml:space="preserve">
+    <value>Database updated successfully!</value>
+  </data>
+  <data name="databaseSuccessTitle" xml:space="preserve">
+    <value>Database Updated!</value>
   </data>
 </root>

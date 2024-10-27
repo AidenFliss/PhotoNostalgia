@@ -44,8 +44,6 @@
             this.checkForUpdatesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.englishToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.spanishToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,14 +52,16 @@
             this.spanishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.noTagsFoundLabel1 = new System.Windows.Forms.Label();
             this.photoBox1 = new System.Windows.Forms.PictureBox();
             this.photoBox6 = new System.Windows.Forms.PictureBox();
             this.photoBox5 = new System.Windows.Forms.PictureBox();
             this.photoBox4 = new System.Windows.Forms.PictureBox();
             this.photoBox3 = new System.Windows.Forms.PictureBox();
             this.photoBox2 = new System.Windows.Forms.PictureBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.noTagsFoundLabel1 = new System.Windows.Forms.Label();
+            this.englishToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.spanishToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.selectNumeric1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.photoBox1)).BeginInit();
@@ -188,22 +188,6 @@
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
             resources.ApplyResources(this.languageToolStripMenuItem, "languageToolStripMenuItem");
             // 
-            // englishToolStripMenuItem1
-            // 
-            this.englishToolStripMenuItem1.Image = global::PhotoNostalgia.Properties.Resources.en;
-            resources.ApplyResources(this.englishToolStripMenuItem1, "englishToolStripMenuItem1");
-            this.englishToolStripMenuItem1.Name = "englishToolStripMenuItem1";
-            this.englishToolStripMenuItem1.Tag = "en";
-            this.englishToolStripMenuItem1.Click += new System.EventHandler(this.languageToolStripMenuItem_Click);
-            // 
-            // spanishToolStripMenuItem1
-            // 
-            this.spanishToolStripMenuItem1.Image = global::PhotoNostalgia.Properties.Resources.es;
-            resources.ApplyResources(this.spanishToolStripMenuItem1, "spanishToolStripMenuItem1");
-            this.spanishToolStripMenuItem1.Name = "spanishToolStripMenuItem1";
-            this.spanishToolStripMenuItem1.Tag = "es";
-            this.spanishToolStripMenuItem1.Click += new System.EventHandler(this.languageToolStripMenuItem_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -255,11 +239,23 @@
             resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
             this.toolStripMenuItem3.Click += new System.EventHandler(this.aboutButton1_Click);
             // 
+            // flowLayoutPanel1
+            // 
+            resources.ApplyResources(this.flowLayoutPanel1, "flowLayoutPanel1");
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            // 
+            // noTagsFoundLabel1
+            // 
+            resources.ApplyResources(this.noTagsFoundLabel1, "noTagsFoundLabel1");
+            this.noTagsFoundLabel1.Name = "noTagsFoundLabel1";
+            // 
             // photoBox1
             // 
             resources.ApplyResources(this.photoBox1, "photoBox1");
             this.photoBox1.Name = "photoBox1";
             this.photoBox1.TabStop = false;
+            this.photoBox1.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.pictureBox_LoadCompleted);
+            this.photoBox1.Click += new System.EventHandler(this.pictureBox_Click);
             this.photoBox1.DoubleClick += new System.EventHandler(this.pictureBox_DoubleClick);
             // 
             // photoBox6
@@ -297,15 +293,21 @@
             this.photoBox2.TabStop = false;
             this.photoBox2.DoubleClick += new System.EventHandler(this.pictureBox_DoubleClick);
             // 
-            // flowLayoutPanel1
+            // englishToolStripMenuItem1
             // 
-            resources.ApplyResources(this.flowLayoutPanel1, "flowLayoutPanel1");
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.englishToolStripMenuItem1.Image = global::PhotoNostalgia.Properties.Resources.en;
+            resources.ApplyResources(this.englishToolStripMenuItem1, "englishToolStripMenuItem1");
+            this.englishToolStripMenuItem1.Name = "englishToolStripMenuItem1";
+            this.englishToolStripMenuItem1.Tag = "en";
+            this.englishToolStripMenuItem1.Click += new System.EventHandler(this.languageToolStripMenuItem_Click);
             // 
-            // noTagsFoundLabel1
+            // spanishToolStripMenuItem1
             // 
-            resources.ApplyResources(this.noTagsFoundLabel1, "noTagsFoundLabel1");
-            this.noTagsFoundLabel1.Name = "noTagsFoundLabel1";
+            this.spanishToolStripMenuItem1.Image = global::PhotoNostalgia.Properties.Resources.es;
+            resources.ApplyResources(this.spanishToolStripMenuItem1, "spanishToolStripMenuItem1");
+            this.spanishToolStripMenuItem1.Name = "spanishToolStripMenuItem1";
+            this.spanishToolStripMenuItem1.Tag = "es";
+            this.spanishToolStripMenuItem1.Click += new System.EventHandler(this.languageToolStripMenuItem_Click);
             // 
             // Form1
             // 
