@@ -80,8 +80,13 @@ namespace PhotoNostalgia.Classes
 
                     var fileNames = new string[]
                     {
+                        "PhotoNostalgia.deps.json",
+                        "PhotoNostalgia.dll",
                         "PhotoNostalgia.exe",
+                        "PhotoNostalgia.pdb",
+                        "PhotoNostalgia.runtimeconfig.json",
                         "Ookii.Dialogs.WinForms.dll",
+                        "Newtonsoft.Json.dll"
                     };
 
                     foreach (var file in fileNames)

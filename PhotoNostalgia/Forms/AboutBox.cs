@@ -17,7 +17,7 @@ namespace PhotoNostalgia.Forms
 
         #region Assembly Attribute Accessors
 
-        public string AssemblyTitle
+        public static string AssemblyTitle
         {
             get
             {
@@ -30,7 +30,7 @@ namespace PhotoNostalgia.Forms
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
 

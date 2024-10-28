@@ -25,6 +25,6 @@ namespace PhotoNostalgia.Classes
             Description = description;
         }
 
-        public static PhotoNostalgiaVersion GetCurrent() => new PhotoNostalgiaVersion("v2024.10.27", "v1.0", "");
+        public static PhotoNostalgiaVersion GetCurrent() => new PhotoNostalgiaVersion("v2024.10.28", "v1.0", "");
     }
 }

@@ -11,10 +11,10 @@ namespace PhotoNostalgia.Forms
             InitializeComponent();
         }
 
-        Form1 mainWindow = null;
+        MainForm mainWindow = null;
         public bool shouldRemoveSelf = true;
 
-        public void PictureViewer_LoadImage(string path, Form1 mainWindw)
+        public void PictureViewer_LoadImage(string path, MainForm mainWindw)
         {
             if (mainWindw != null)
             {
@@ -70,9 +70,9 @@ namespace PhotoNostalgia.Forms
             {
                 int length = pictureDisplay1.ImageLocation.Length;
                 string path = Path.GetFileName(pictureDisplay1.ImageLocation);
-                if (Form1.TagDatabase.ContainsKey(path))
+                if (MainForm.TagDatabase.ContainsKey(path))
                 {
-                    string[] tags = Form1.TagDatabase[path];
+                    string[] tags = MainForm.TagDatabase[path];
                     foreach (string tag in tags)
                     {
                         tagsBox1.Text += tag + ", ";
@@ -98,7 +98,7 @@ namespace PhotoNostalgia.Forms
                     MessageBoxDefaultButton.Button2);
                 if (result == DialogResult.Yes)
                 {
-                    Form1.TagDatabase.Remove(Path.GetFileName(pictureDisplay1.ImageLocation));
+                    MainForm.TagDatabase.Remove(Path.GetFileName(pictureDisplay1.ImageLocation));
                     MessageBox.Show(
                         mainWindow.resourceManager.GetString("deleteNotif"),
                         mainWindow.resourceManager.GetString("deleteNotifTitle"),
@@ -117,10 +117,10 @@ namespace PhotoNostalgia.Forms
                     MessageBoxDefaultButton.Button2);
                 if (result == DialogResult.Yes)
                 {
-                    Form1.TagDatabase[Path.GetFileName(pictureDisplay1.ImageLocation)] = tags;
+                    MainForm.TagDatabase[Path.GetFileName(pictureDisplay1.ImageLocation)] = tags;
                 }
             }
-            Form1.SaveDatabase();
+            MainForm.SaveDatabase();
             mainWindow.UpdateTagButtons();
         }
     }

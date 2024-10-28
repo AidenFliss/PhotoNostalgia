@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.11.35312.102
+VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoNostalgia", "PhotoNostalgia\PhotoNostalgia.csproj", "{2252DDA4-58D3-43B7-AE16-43A0E599F5FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoNostalgia", "PhotoNostalgia\PhotoNostalgia.csproj", "{DD09F715-13E6-4B4C-9DF6-4DD0D604F441}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2252DDA4-58D3-43B7-AE16-43A0E599F5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2252DDA4-58D3-43B7-AE16-43A0E599F5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2252DDA4-58D3-43B7-AE16-43A0E599F5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2252DDA4-58D3-43B7-AE16-43A0E599F5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD09F715-13E6-4B4C-9DF6-4DD0D604F441}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD09F715-13E6-4B4C-9DF6-4DD0D604F441}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD09F715-13E6-4B4C-9DF6-4DD0D604F441}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD09F715-13E6-4B4C-9DF6-4DD0D604F441}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {85A16F72-1A1B-4285-BD9F-C40E23909FDC}
+		SolutionGuid = {B549DB38-8585-4E3F-8100-2E338F6F2A1A}
 	EndGlobalSection
 EndGlobal

@@ -1,12 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Drawing;
-using System.Resources;
+﻿using System.Resources;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Globalization;
-using System.Collections.Generic;
 using PhotoNostalgia.Properties;
 using PhotoNostalgia.Classes;
 using Ookii.Dialogs.WinForms;
@@ -15,9 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace PhotoNostalgia.Forms
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             string[] args = Environment.GetCommandLineArgs();
 
@@ -31,17 +25,16 @@ namespace PhotoNostalgia.Forms
             InitializeComponent();
         }
 
-        string SettingsPath = Environment.CurrentDirectory + "\\settings.json";
+        static readonly string SettingsPath = Environment.CurrentDirectory + "\\settings.json";
 
-        static string DatabaseLocation = Environment.CurrentDirectory + "\\database.json";
-        static string DatabaseBackupLocation = Environment.CurrentDirectory + "\\database_backup.json";
+        static readonly string DatabaseLocation = Environment.CurrentDirectory + "\\database.json";
+        static readonly string DatabaseBackupLocation = Environment.CurrentDirectory + "\\database_backup.json";
 
-        public static Dictionary<string, string[]> TagDatabase = new Dictionary<string, string[]>();
+        public static Dictionary<string, string[]> TagDatabase = [];
 
         VistaFolderBrowserDialog fbd;
-        About aboutWindow = null;
-
-        List<PictureViewer> pictureViewers = new List<PictureViewer>();
+        About aboutWindow;
+        private readonly List<PictureViewer> pictureViewers = [];
 
         bool checkForUpdates = true;
         string photoPath;
@@ -55,19 +48,19 @@ namespace PhotoNostalgia.Forms
 
         static bool saving = false;
 
-        List<string> validTags = new List<string>();
-        List<string> selectedTags = new List<string>();
+        List<string> validTags = [];
+        List<string> selectedTags = [];
 
-        List<string> photoPaths = new List<string>();
-        List<string> currentPhotos = new List<string>();
+        List<string> photoPaths = [];
+        List<string> currentPhotos = [];
 
-        List<CheckBox> tagBoxes = new List<CheckBox>();
+        List<CheckBox> tagBoxes = [];
 
         public ResourceManager resourceManager;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            resourceManager = new ResourceManager("PhotoNostalgia.Forms.Form1", typeof(Program).Assembly);
+            resourceManager = new ResourceManager("PhotoNostalgia.Forms.MainForm", typeof(Program).Assembly);
 
             if (photoPath == null || !Directory.Exists(photoPath))
             {
@@ -85,9 +78,11 @@ namespace PhotoNostalgia.Forms
 
                 while (true)
                 {
-                    fbd = new VistaFolderBrowserDialog();
-                    fbd.Description = "Please select the \"FastFoto\" folder.";
-                    fbd.UseDescriptionForTitle = true;
+                    fbd = new VistaFolderBrowserDialog
+                    {
+                        Description = "Please select the \"FastFoto\" folder.",
+                        UseDescriptionForTitle = true
+                    };
                     fbd.ShowDialog();
 
                     if (!Directory.Exists(fbd.SelectedPath) || fbd.SelectedPath == null)
@@ -141,7 +136,7 @@ namespace PhotoNostalgia.Forms
 
             foreach (ToolStripMenuItem languageItem in languageItems)
             {
-                string languageCode = (languageItem.Tag as string);
+                string? languageCode = languageItem.Tag as string;
 
                 if (!String.IsNullOrEmpty(languageCode))
                 {
@@ -219,7 +214,7 @@ namespace PhotoNostalgia.Forms
 
         private void pictureBox_DoubleClick(object sender, EventArgs e)
         {
-            if (((sender as PictureBox).Tag as string) == "[IGNORE]")
+            if ((sender as PictureBox).Tag as string == "[IGNORE]")
             {
                 return;
             }
@@ -296,7 +291,7 @@ namespace PhotoNostalgia.Forms
                 tagButton.Tag = tag;
                 tagButton.AutoSize = true;
                 tagButton.Font = new Font("Microsoft Sans Serif", 7F);
-                tagButton.MaximumSize = new Size(99999, 20);
+                tagButton.MaximumSize = new Size(99999, 25);
                 tagButton.TextAlign = ContentAlignment.MiddleCenter;
                 tagButton.Appearance = Appearance.Button;
                 tagButton.Click += tagButton_Click;
