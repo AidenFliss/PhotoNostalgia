@@ -419,7 +419,7 @@
     <value>White</value>
   </data>
   <data name="englishToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>224, 26</value>
+    <value>143, 26</value>
   </data>
   <data name="englishToolStripMenuItem1.Text" xml:space="preserve">
     <value>English</value>
@@ -431,7 +431,7 @@
     <value>White</value>
   </data>
   <data name="spanishToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>224, 26</value>
+    <value>143, 26</value>
   </data>
   <data name="spanishToolStripMenuItem1.Text" xml:space="preserve">
     <value>Spanish</value>

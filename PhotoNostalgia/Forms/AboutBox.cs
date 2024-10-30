@@ -1,18 +1,15 @@
-﻿using System;
-using System.Reflection;
-using System.Windows.Forms;
+﻿using System.Reflection;
+
+#pragma warning disable CS8602
 
 namespace PhotoNostalgia.Forms
 {
     partial class About : Form
     {
-        public static bool closed = false;
-
         public About()
         {
             InitializeComponent();
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            closed = false;
+            labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
         }
 
         #region Assembly Attribute Accessors
@@ -82,10 +79,15 @@ namespace PhotoNostalgia.Forms
         }
         #endregion
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
-            closed = true;
-            this.Close();
+            MainForm.Instance.AboutBoxClosed();
+            Close();
+        }
+
+        private void About_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm.Instance.AboutBoxClosed();
         }
     }
 }

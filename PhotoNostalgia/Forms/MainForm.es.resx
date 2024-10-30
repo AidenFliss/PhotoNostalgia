@@ -138,12 +138,6 @@
   <data name="tagSelectorLabel1.Text" xml:space="preserve">
     <value>Selector de etiquetas:</value>
   </data>
-  <data name="menuStrip1.Text" xml:space="preserve">
-    <value>menuStrip1</value>
-  </data>
-  <data name="settingsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Configuración</value>
-  </data>
   <data name="closeAllPictureViewersToolStripMenuItem.Text" xml:space="preserve">
     <value>Cerrar todos los visores de imágenes</value>
   </data>
@@ -153,23 +147,23 @@
   <data name="checkForUpdatesToolStripMenuItem.Text" xml:space="preserve">
     <value>Buscar actualizaciones al iniciar</value>
   </data>
-  <data name="languageToolStripMenuItem.Text" xml:space="preserve">
-    <value>Idioma</value>
-  </data>
   <data name="englishToolStripMenuItem1.Text" xml:space="preserve">
     <value>Inglés</value>
   </data>
   <data name="spanishToolStripMenuItem1.Text" xml:space="preserve">
     <value>Español</value>
   </data>
+  <data name="languageToolStripMenuItem.Text" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
   <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
     <value>Acerca</value>
   </data>
-  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+  <data name="settingsToolStripMenuItem.Text" xml:space="preserve">
     <value>Configuración</value>
   </data>
-  <data name="toolStripMenuItem2.Text" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="menuStrip1.Text" xml:space="preserve">
+    <value>menuStrip1</value>
   </data>
   <data name="englishToolStripMenuItem.Text" xml:space="preserve">
     <value>Inglés</value>
@@ -177,12 +171,14 @@
   <data name="spanishToolStripMenuItem.Text" xml:space="preserve">
     <value>Español</value>
   </data>
+  <data name="toolStripMenuItem2.Text" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
   <data name="toolStripMenuItem3.Text" xml:space="preserve">
     <value>Acerca</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="&gt;&gt;photoBox1.Name" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>Configuración</value>
   </data>
   <data name="noTagsFoundLabel1.Text" xml:space="preserve">
     <value>¡No hay imágenes etiquetadas!</value>
@@ -252,5 +248,17 @@
   </data>
   <data name="databaseSuccessTitle" xml:space="preserve">
     <value>¡Base de datos actualizada!</value>
+  </data>
+  <data name="databaseUpToDate" xml:space="preserve">
+    <value>¡Tu base de datos está actualizada!</value>
+  </data>
+  <data name="databaseUpToDateTitle" xml:space="preserve">
+    <value>¡Base de datos actualizada!</value>
+  </data>
+  <data name="appUpToDate" xml:space="preserve">
+    <value>¡La aplicación está actualizada!</value>
+  </data>
+  <data name="appUpToDateTitle" xml:space="preserve">
+    <value>¡Aplicación actualizada!</value>
   </data>
 </root>

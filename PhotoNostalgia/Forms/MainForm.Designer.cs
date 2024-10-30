@@ -77,28 +77,28 @@
             resources.ApplyResources(firstPageButton1, "firstPageButton1");
             firstPageButton1.Name = "firstPageButton1";
             firstPageButton1.UseVisualStyleBackColor = true;
-            firstPageButton1.Click += firstPageButton1_Click;
+            firstPageButton1.Click += FirstPageButton1_Click;
             // 
             // lastPageButton1
             // 
             resources.ApplyResources(lastPageButton1, "lastPageButton1");
             lastPageButton1.Name = "lastPageButton1";
             lastPageButton1.UseVisualStyleBackColor = true;
-            lastPageButton1.Click += lastPageButton1_Click;
+            lastPageButton1.Click += LastPageButton1_Click;
             // 
             // prevPageButton1
             // 
             resources.ApplyResources(prevPageButton1, "prevPageButton1");
             prevPageButton1.Name = "prevPageButton1";
             prevPageButton1.UseVisualStyleBackColor = true;
-            prevPageButton1.Click += prevPageButton1_Click;
+            prevPageButton1.Click += PrevPageButton1_Click;
             // 
             // nextPageButton1
             // 
             resources.ApplyResources(nextPageButton1, "nextPageButton1");
             nextPageButton1.Name = "nextPageButton1";
             nextPageButton1.UseVisualStyleBackColor = true;
-            nextPageButton1.Click += nextPageButton1_Click;
+            nextPageButton1.Click += NextPageButton1_Click;
             // 
             // label1
             // 
@@ -117,7 +117,7 @@
             selectNumeric1.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             selectNumeric1.Name = "selectNumeric1";
             selectNumeric1.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            selectNumeric1.ValueChanged += selectNumeric1_ValueChanged;
+            selectNumeric1.ValueChanged += SelectNumeric1_ValueChanged;
             // 
             // tagSelectorLabel1
             // 
@@ -126,6 +126,7 @@
             // 
             // menuStrip1
             // 
+            menuStrip1.BackColor = SystemColors.Control;
             menuStrip1.ImageScalingSize = new Size(20, 20);
             menuStrip1.Items.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
             resources.ApplyResources(menuStrip1, "menuStrip1");
@@ -141,7 +142,7 @@
             // 
             closeAllPictureViewersToolStripMenuItem.Name = "closeAllPictureViewersToolStripMenuItem";
             resources.ApplyResources(closeAllPictureViewersToolStripMenuItem, "closeAllPictureViewersToolStripMenuItem");
-            closeAllPictureViewersToolStripMenuItem.Click += closeAllPictureViewersToolStripMenuItem_Click;
+            closeAllPictureViewersToolStripMenuItem.Click += CloseAllPictureViewersToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
@@ -152,13 +153,13 @@
             // 
             checkForUpdatesToolStripMenuItem1.Name = "checkForUpdatesToolStripMenuItem1";
             resources.ApplyResources(checkForUpdatesToolStripMenuItem1, "checkForUpdatesToolStripMenuItem1");
-            checkForUpdatesToolStripMenuItem1.Click += checkForUpdatesToolStripMenuItem1_Click;
+            checkForUpdatesToolStripMenuItem1.Click += CheckForUpdatesToolStripMenuItem1_Click;
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             resources.ApplyResources(checkForUpdatesToolStripMenuItem, "checkForUpdatesToolStripMenuItem");
-            checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
+            checkForUpdatesToolStripMenuItem.Click += CheckForUpdatesToolStripMenuItem_Click;
             // 
             // languageToolStripMenuItem
             // 
@@ -172,7 +173,7 @@
             englishToolStripMenuItem1.Image = Properties.Resources.en;
             englishToolStripMenuItem1.Name = "englishToolStripMenuItem1";
             englishToolStripMenuItem1.Tag = "en";
-            englishToolStripMenuItem1.Click += languageToolStripMenuItem_Click;
+            englishToolStripMenuItem1.Click += LanguageToolStripMenuItem_Click;
             // 
             // spanishToolStripMenuItem1
             // 
@@ -180,7 +181,7 @@
             spanishToolStripMenuItem1.Image = Properties.Resources.es;
             spanishToolStripMenuItem1.Name = "spanishToolStripMenuItem1";
             spanishToolStripMenuItem1.Tag = "es";
-            spanishToolStripMenuItem1.Click += languageToolStripMenuItem_Click;
+            spanishToolStripMenuItem1.Click += LanguageToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
@@ -191,7 +192,7 @@
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             resources.ApplyResources(aboutToolStripMenuItem, "aboutToolStripMenuItem");
-            aboutToolStripMenuItem.Click += aboutButton1_Click;
+            aboutToolStripMenuItem.Click += AboutButton1_Click;
             // 
             // toolStripMenuItem1
             // 
@@ -209,13 +210,13 @@
             // 
             englishToolStripMenuItem.Name = "englishToolStripMenuItem";
             resources.ApplyResources(englishToolStripMenuItem, "englishToolStripMenuItem");
-            englishToolStripMenuItem.Click += languageToolStripMenuItem_Click;
+            englishToolStripMenuItem.Click += LanguageToolStripMenuItem_Click;
             // 
             // spanishToolStripMenuItem
             // 
             spanishToolStripMenuItem.Name = "spanishToolStripMenuItem";
             resources.ApplyResources(spanishToolStripMenuItem, "spanishToolStripMenuItem");
-            spanishToolStripMenuItem.Click += languageToolStripMenuItem_Click;
+            spanishToolStripMenuItem.Click += LanguageToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
@@ -226,7 +227,7 @@
             // 
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             resources.ApplyResources(toolStripMenuItem3, "toolStripMenuItem3");
-            toolStripMenuItem3.Click += aboutButton1_Click;
+            toolStripMenuItem3.Click += AboutButton1_Click;
             // 
             // flowLayoutPanel1
             // 
@@ -243,44 +244,54 @@
             resources.ApplyResources(photoBox1, "photoBox1");
             photoBox1.Name = "photoBox1";
             photoBox1.TabStop = false;
-            photoBox1.LoadCompleted += pictureBox_LoadCompleted;
-            photoBox1.Click += pictureBox_Click;
-            photoBox1.DoubleClick += pictureBox_DoubleClick;
+            photoBox1.LoadCompleted += PictureBox_LoadCompleted;
+            photoBox1.Click += PictureBox_Click;
+            photoBox1.DoubleClick += PictureBox_DoubleClick;
             // 
             // photoBox6
             // 
             resources.ApplyResources(photoBox6, "photoBox6");
             photoBox6.Name = "photoBox6";
             photoBox6.TabStop = false;
-            photoBox6.DoubleClick += pictureBox_DoubleClick;
+            photoBox6.LoadCompleted += PictureBox_LoadCompleted;
+            photoBox6.Click += PictureBox_Click;
+            photoBox6.DoubleClick += PictureBox_DoubleClick;
             // 
             // photoBox5
             // 
             resources.ApplyResources(photoBox5, "photoBox5");
             photoBox5.Name = "photoBox5";
             photoBox5.TabStop = false;
-            photoBox5.DoubleClick += pictureBox_DoubleClick;
+            photoBox5.LoadCompleted += PictureBox_LoadCompleted;
+            photoBox5.Click += PictureBox_Click;
+            photoBox5.DoubleClick += PictureBox_DoubleClick;
             // 
             // photoBox4
             // 
             resources.ApplyResources(photoBox4, "photoBox4");
             photoBox4.Name = "photoBox4";
             photoBox4.TabStop = false;
-            photoBox4.DoubleClick += pictureBox_DoubleClick;
+            photoBox4.LoadCompleted += PictureBox_LoadCompleted;
+            photoBox4.Click += PictureBox_Click;
+            photoBox4.DoubleClick += PictureBox_DoubleClick;
             // 
             // photoBox3
             // 
             resources.ApplyResources(photoBox3, "photoBox3");
             photoBox3.Name = "photoBox3";
             photoBox3.TabStop = false;
-            photoBox3.DoubleClick += pictureBox_DoubleClick;
+            photoBox3.LoadCompleted += PictureBox_LoadCompleted;
+            photoBox3.Click += PictureBox_Click;
+            photoBox3.DoubleClick += PictureBox_DoubleClick;
             // 
             // photoBox2
             // 
             resources.ApplyResources(photoBox2, "photoBox2");
             photoBox2.Name = "photoBox2";
             photoBox2.TabStop = false;
-            photoBox2.DoubleClick += pictureBox_DoubleClick;
+            photoBox2.LoadCompleted += PictureBox_LoadCompleted;
+            photoBox2.Click += PictureBox_Click;
+            photoBox2.DoubleClick += PictureBox_DoubleClick;
             // 
             // MainForm
             // 

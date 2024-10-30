@@ -1,43 +1,56 @@
-﻿using System.Resources;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Ookii.Dialogs.WinForms;
+using PhotoNostalgia.Classes;
+using PhotoNostalgia.Properties;
 using System.Diagnostics;
 using System.Globalization;
-using PhotoNostalgia.Properties;
-using PhotoNostalgia.Classes;
-using Ookii.Dialogs.WinForms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Resources;
+
+#pragma warning disable CS8600
+#pragma warning disable CS8601
+#pragma warning disable CS8602
+#pragma warning disable CS8603
+#pragma warning disable CS8604
+#pragma warning disable CS8622
 
 namespace PhotoNostalgia.Forms
 {
     public partial class MainForm : Form
     {
+        private static MainForm? _instance;
+
         public MainForm()
         {
-            string[] args = Environment.GetCommandLineArgs();
-
-            PhotoNostalgiaSettings settings = LoadSettings();
-
-            if (settings.CheckForUpdatesOnStart && !args.Contains("-forceSkipUpdateCheck"))
-            {
-                TryUpdate();
-            }
-
+            resourceManager = new ResourceManager("PhotoNostalgia.Forms.MainForm", typeof(Program).Assembly);
             InitializeComponent();
         }
 
-        static readonly string SettingsPath = Environment.CurrentDirectory + "\\settings.json";
+        public static MainForm Instance
+        {
+            get
+            {
+                if (_instance == null || _instance.IsDisposed)
+                {
+                    _instance = new MainForm();
+                }
+                return _instance;
+            }
+        }
 
-        static readonly string DatabaseLocation = Environment.CurrentDirectory + "\\database.json";
-        static readonly string DatabaseBackupLocation = Environment.CurrentDirectory + "\\database_backup.json";
+        public static readonly string SettingsPath = Environment.CurrentDirectory + "\\settings.json";
+
+        public static readonly string DatabaseLocation = Environment.CurrentDirectory + "\\database.json";
+        public static readonly string DatabaseBackupLocation = Environment.CurrentDirectory + "\\database_backup.json";
 
         public static Dictionary<string, string[]> TagDatabase = [];
 
-        VistaFolderBrowserDialog fbd;
-        About aboutWindow;
+        VistaFolderBrowserDialog? fbd;
+        About? aboutWindow;
         private readonly List<PictureViewer> pictureViewers = [];
 
         bool checkForUpdates = true;
-        string photoPath;
+        string? photoPath;
 
         int offset = 0;
         int page = 1;
@@ -45,8 +58,6 @@ namespace PhotoNostalgia.Forms
         int totalPhotos;
         int totalPages;
         int totalOffset;
-
-        static bool saving = false;
 
         List<string> validTags = [];
         List<string> selectedTags = [];
@@ -60,7 +71,14 @@ namespace PhotoNostalgia.Forms
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            resourceManager = new ResourceManager("PhotoNostalgia.Forms.MainForm", typeof(Program).Assembly);
+            string[] args = Environment.GetCommandLineArgs();
+
+            PhotoNostalgiaSettings settings = LoadSettings();
+
+            if (settings.CheckForUpdatesOnStart && !args.Contains("-forceSkipUpdateCheck"))
+            {
+                TryUpdate();
+            }
 
             if (photoPath == null || !Directory.Exists(photoPath))
             {
@@ -121,11 +139,6 @@ namespace PhotoNostalgia.Forms
                 File.Copy(DatabaseBackupLocation, DatabaseLocation);
             }
 
-            if (!File.Exists(DatabaseLocation) && !File.Exists(DatabaseBackupLocation))
-            {
-                File.WriteAllText(DatabaseLocation, "{}");
-            }
-
             if (File.Exists(DatabaseLocation))
             {
                 string data = File.ReadAllText(DatabaseLocation);
@@ -149,6 +162,8 @@ namespace PhotoNostalgia.Forms
                 }
             }
 
+            checkForUpdatesToolStripMenuItem.Checked = settings.CheckForUpdatesOnStart;
+
             UpdateTagButtons();
             UpdatePictureGrid();
         }
@@ -157,18 +172,15 @@ namespace PhotoNostalgia.Forms
         {
             if (await AutoUpdater.Update())
             {
-                Close();
-                Process.Start(Path.Combine(Application.StartupPath, "PhotoNostalgia.exe"), "-forceSkipUpdateCheck");
+                Restart();
             }
         }
 
-        async void CheckForDatabaseUpdate()
+        public void Restart()
         {
-            if (await AutoUpdater.UpdateDB())
-            {
-                Close();
-                Process.Start(Path.Combine(Application.StartupPath, "PhotoNostalgia.exe"));
-            }
+            Close();
+            Process.Start(Application.ExecutablePath, "-forceSkipUpdateCheck");
+            Application.Exit();
         }
 
         PhotoNostalgiaSettings LoadSettings()
@@ -196,11 +208,6 @@ namespace PhotoNostalgia.Forms
 
         void SaveSettings()
         {
-            if (saving)
-            {
-                return;
-            }
-            saving = true;
             PhotoNostalgiaSettings settings = new PhotoNostalgiaSettings();
 
             settings.Version = 1;
@@ -209,10 +216,15 @@ namespace PhotoNostalgia.Forms
             settings.Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
 
             File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(settings));
-            saving = false;
         }
 
-        private void pictureBox_DoubleClick(object sender, EventArgs e)
+        public void LoadDatabase()
+        {
+            string data = File.ReadAllText(DatabaseLocation);
+            TagDatabase = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(data);
+        }
+
+        private void PictureBox_DoubleClick(object sender, EventArgs e)
         {
             if ((sender as PictureBox).Tag as string == "[IGNORE]")
             {
@@ -229,8 +241,33 @@ namespace PhotoNostalgia.Forms
             */
             PictureViewer viewer = new PictureViewer();
             pictureViewers.Add(viewer);
-            viewer.PictureViewer_LoadImage((sender as PictureBox).ImageLocation, this);
+            viewer.PictureViewer_LoadImage((sender as PictureBox).ImageLocation);
             viewer.Show(this);
+        }
+
+        private void PictureBox_Click(object sender, EventArgs e)
+        {
+            PictureBox pictureBox = (sender as PictureBox);
+            string tag = (pictureBox.Tag as string);
+
+            if (!String.IsNullOrEmpty(tag))
+            {
+                if (File.Exists(tag))
+                {
+                    pictureBox.Image = Resources.PlaceholderImage;
+                    pictureBox.ImageLocation = "file:///" + tag;
+                }
+            }
+        }
+
+        private void PictureBox_LoadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                PictureBox pictureBox = (sender as PictureBox);
+                pictureBox.Tag = pictureBox.ImageLocation;
+                pictureBox.Image = Resources.FailedLoading;
+            }
         }
 
         public void NullifyPictureViewer(PictureViewer viewer)
@@ -243,7 +280,17 @@ namespace PhotoNostalgia.Forms
 
         public void UpdateTagButtons()
         {
-            string jsonText = File.ReadAllText(DatabaseLocation);
+            string jsonText;
+
+            if (!File.Exists(DatabaseLocation))
+            {
+                jsonText = "{}";
+            }
+            else
+            {
+                jsonText = File.ReadAllText(DatabaseLocation);
+            }
+
             JObject data = JsonConvert.DeserializeObject<JObject>(jsonText);
 
             HashSet<string> uniqueValues = new HashSet<string>();
@@ -294,7 +341,7 @@ namespace PhotoNostalgia.Forms
                 tagButton.MaximumSize = new Size(99999, 25);
                 tagButton.TextAlign = ContentAlignment.MiddleCenter;
                 tagButton.Appearance = Appearance.Button;
-                tagButton.Click += tagButton_Click;
+                tagButton.Click += TagButton_Click;
                 flowLayoutPanel1.Controls.Add(tagButton);
             }
 
@@ -337,19 +384,19 @@ namespace PhotoNostalgia.Forms
             lastPageButton1.Enabled = offset < totalOffset - 6;
         }
 
-        private void firstPageButton1_Click(object sender, EventArgs e)
+        private void FirstPageButton1_Click(object sender, EventArgs e)
         {
             offset = 0;
             UpdatePictureGrid();
         }
 
-        private void lastPageButton1_Click(object sender, EventArgs e)
+        private void LastPageButton1_Click(object sender, EventArgs e)
         {
             offset = totalOffset - 6;
             UpdatePictureGrid();
         }
 
-        private void prevPageButton1_Click(object sender, EventArgs e)
+        private void PrevPageButton1_Click(object sender, EventArgs e)
         {
             if (offset > 0)
             {
@@ -358,7 +405,7 @@ namespace PhotoNostalgia.Forms
             UpdatePictureGrid();
         }
 
-        private void nextPageButton1_Click(object sender, EventArgs e)
+        private void NextPageButton1_Click(object sender, EventArgs e)
         {
             if (offset < totalOffset - 6)
             {
@@ -367,14 +414,14 @@ namespace PhotoNostalgia.Forms
             UpdatePictureGrid();
         }
 
-        private void selectNumeric1_ValueChanged(object sender, EventArgs e)
+        private void SelectNumeric1_ValueChanged(object sender, EventArgs e)
         {
             page = (int)selectNumeric1.Value - 1;
             offset = page * 6;
             UpdatePictureGrid();
         }
 
-        private void tagButton_Click(object sender, EventArgs e)
+        private void TagButton_Click(object sender, EventArgs e)
         {
             CheckBox tagClicked = (sender as CheckBox);
             string tag = (tagClicked.Tag as string);
@@ -425,26 +472,22 @@ namespace PhotoNostalgia.Forms
 
         public static void SaveDatabase()
         {
-            if (saving == true)
-            {
-                return;
-            }
-            saving = true;
             string json = JsonConvert.SerializeObject(TagDatabase, Formatting.Indented);
+            if (json == "{}" && File.Exists(DatabaseLocation))
+            {
+                json = File.ReadAllText(DatabaseLocation);
+            }
             File.WriteAllText(DatabaseLocation, json);
-            saving = false;
         }
 
         public static void BackupDatabase()
         {
-            if (saving == true)
-            {
-                return;
-            }
-            saving = true;
             string json = JsonConvert.SerializeObject(TagDatabase, Formatting.Indented);
+            if (json == "{}" && File.Exists(DatabaseLocation))
+            {
+                json = File.ReadAllText(DatabaseLocation);
+            }
             File.WriteAllText(DatabaseBackupLocation, json);
-            saving = false;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -462,12 +505,10 @@ namespace PhotoNostalgia.Forms
             CultureInfo.CurrentUICulture = culture;
 
             SaveSettings();
-            Close();
-
-            Process.Start(Application.ExecutablePath, "-forceSkipUpdateCheck");
+            Restart();
         }
 
-        private void languageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LanguageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (sender as ToolStripMenuItem);
 
@@ -482,26 +523,40 @@ namespace PhotoNostalgia.Forms
             }
         }
 
-        private void aboutButton1_Click(object sender, EventArgs e)
+        private void AboutButton1_Click(object sender, EventArgs e)
         {
-            if (toolStripMenuItem3.Checked == false)
+            if (aboutToolStripMenuItem.Checked == false)
             {
-                if (aboutWindow == null)
-                {
-                    aboutWindow = new About();
-                    aboutWindow.Show(this);
-                    toolStripMenuItem3.Checked = true;
-                }
+                aboutWindow = new About();
+                aboutWindow.FormClosed += AboutWindow_FormClosed;
+                aboutWindow.Show(this);
+                aboutToolStripMenuItem.Checked = true;
             }
             else
             {
                 aboutWindow.Close();
                 aboutWindow = null;
-                toolStripMenuItem3.Checked = false;
+                aboutToolStripMenuItem.Checked = false;
             }
         }
 
-        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        public void AboutBoxClosed()
+        {
+            if (aboutWindow != null)
+            {
+                aboutWindow.Close();
+                aboutWindow = null;
+            }
+            aboutToolStripMenuItem.Checked = false;
+        }
+
+        private void AboutWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            aboutWindow = null;
+            aboutToolStripMenuItem.Checked = false;
+        }
+
+        private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (checkForUpdates == true)
             {
@@ -516,13 +571,12 @@ namespace PhotoNostalgia.Forms
             SaveSettings();
         }
 
-        private void checkForUpdatesToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void CheckForUpdatesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             TryUpdate();
-            CheckForDatabaseUpdate();
         }
 
-        private void closeAllPictureViewersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseAllPictureViewersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (PictureViewer pictureViewer in pictureViewers)
             {
@@ -531,31 +585,6 @@ namespace PhotoNostalgia.Forms
                 pictureViewer.Dispose();
             }
             pictureViewers.Clear();
-        }
-
-        private void pictureBox_Click(object sender, EventArgs e)
-        {
-            PictureBox pictureBox = (sender as PictureBox);
-            string tag = (pictureBox.Tag as string);
-
-            if (!String.IsNullOrEmpty(tag))
-            {
-                if (File.Exists(tag))
-                {
-                    pictureBox.Image = Resources.PlaceholderImage;
-                    pictureBox.ImageLocation = "file:///" + tag;
-                }
-            }
-        }
-
-        private void pictureBox_LoadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                PictureBox pictureBox = (sender as PictureBox);
-                pictureBox.Tag = pictureBox.ImageLocation;
-                pictureBox.Image = Resources.FailedLoading;
-            }
         }
     }
 }

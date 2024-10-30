@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Linq;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.IO.Compression;
-using System.Threading.Tasks;
+﻿using System.IO.Compression;
 using System.Resources;
-using System.Net.Http;
 using Newtonsoft.Json;
+using PhotoNostalgia.Forms;
+
+#pragma warning disable CS8602
 
 namespace PhotoNostalgia.Classes
 {
@@ -16,7 +11,7 @@ namespace PhotoNostalgia.Classes
     {
         public static async Task<bool> Update()
         {
-            var resourceManager = new ResourceManager("PhotoNostalgia.Forms.Form1", typeof(Program).Assembly);
+            var resourceManager = new ResourceManager("PhotoNostalgia.Forms.MainForm", typeof(Program).Assembly);
 
             try
             {
@@ -34,18 +29,16 @@ namespace PhotoNostalgia.Classes
 
                 if (oldVersion.Version == updatedVersion.Version)
                 {
-                    if (await UpdateDB())
-                    {
-                        MessageBox.Show(
-                            resourceManager.GetString("databaseSuccess"),
-                            resourceManager.GetString("databaseSuccessTitle"),
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-                    }
+                    MessageBox.Show(
+                        resourceManager.GetString("appUpToDate"),
+                        resourceManager.GetString("appUpToDateTitle"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     return false;
                 }
 
-                string messageText = $"{resourceManager.GetString("updateAvalible")}" +
+                string messageText = $"{resourceManager.GetString("updateAvalible")} " +
                     $"{resourceManager.GetString("programName")} {updatedVersion.Version}." +
                     $"\n\n{updatedVersion.Description}\n\n{resourceManager.GetString("downloadPrompt")}";
 
@@ -68,10 +61,11 @@ namespace PhotoNostalgia.Classes
 
                     string updatedZipFilePath = Path.Combine(tempDir, updatedFileName);
 
-                    using (var zipFileStream = await client.GetStreamAsync(updatedUrl))
-                    using (var writer = new BinaryWriter(new FileStream(updatedZipFilePath, FileMode.Create)))
-                        zipFileStream.CopyTo(writer.BaseStream);
-
+                    using var zipFileStream = await client.GetStreamAsync(updatedUrl);
+                    using var outputStream = new FileStream(updatedZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                    
+                    await zipFileStream.CopyToAsync(outputStream);
+                    
                     var oldDirPath = Path.Combine(Application.StartupPath, "PhotoNostalgia_old");
                     if (!Directory.Exists(oldDirPath))
                     {
@@ -115,37 +109,60 @@ namespace PhotoNostalgia.Classes
                     MessageBoxIcon.Error);
             }
 
+            if (Directory.Exists(Path.Combine(Application.StartupPath, "temp")))
+            {
+                Directory.Delete(Path.Combine(Application.StartupPath, "temp"), true);
+            }
+
+            if (await UpdateDB())
+            {
+                MessageBox.Show(
+                    resourceManager.GetString("databaseSuccess"),
+                    resourceManager.GetString("databaseSuccessTitle"),
+                    MessageBoxButtons.OK,
+                  MessageBoxIcon.Information);
+
+                MainForm.Instance.Restart();
+            }
+            
             return false;
         }
 
         public static async Task<bool> UpdateDB()
         {
-            var resourceManager = new ResourceManager("PhotoNostalgia.Forms.Form1", typeof(Program).Assembly);
+            var resourceManager = new ResourceManager("PhotoNostalgia.Forms.MainForm", typeof(Program).Assembly);
 
             try
             {
-                string versionInfoUrl = "https://raw.githubusercontent.com/AidenFliss/PhotoNostalgia/master/PhotoNostalgia/Resources/PhotoNostalgiaVersion.json";
+                string versionInfoUrl = "https://raw.githubusercontent.com/AidenFliss/PhotoNostalgiaDatabase/master/PhotoNostalgiaDBVersion.json";
 
                 var client = new HttpClient();
                 string updatedJson = await client.GetStringAsync(versionInfoUrl);
                 var updatedVersion = JsonConvert.DeserializeObject<PhotoNostalgiaVersion>(updatedJson);
                 var oldVersion = PhotoNostalgiaVersion.GetCurrent();
 
-                if (updatedVersion == null || oldVersion.DBVersion == updatedVersion.DBVersion)
+                if (updatedVersion == null || oldVersion.DBVersion == updatedVersion.DBVersion
+                    && File.Exists(MainForm.DatabaseLocation))
                 {
+                    MessageBox.Show(
+                        resourceManager.GetString("databaseUpToDate"),
+                        resourceManager.GetString("databaseUpToDateTitle"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     return false;
                 }
 
-                string updatedFileName = "database.json";
-                string updatedUrl = $"https://github.com/AidenFliss/PhotoNostalgiaDatabase/releases/download/{updatedVersion.DBVersion}/{updatedFileName}";
+                string updatedUrl = $"https://github.com/AidenFliss/PhotoNostalgiaDatabase/releases/download/{updatedVersion.DBVersion}/database.json";
 
-                string updatedFilePath = Path.Combine(Application.StartupPath, updatedFileName);
+                string updatedFilePath = Path.Combine(Application.StartupPath, "database.json");
 
-                File.Delete(Path.Combine(Application.StartupPath, "databse.json"));
+                if (File.Exists(updatedFilePath))
+                    File.Delete(updatedFilePath);
 
-                using (var fileStream = await client.GetStreamAsync(updatedUrl))
-                using (var writer = new BinaryWriter(new FileStream(updatedFilePath, FileMode.Create)))
-                    fileStream.CopyTo(writer.BaseStream);
+                using var fileStream = await client.GetStreamAsync(updatedUrl);
+                using var outputStream = new FileStream(updatedFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+
+                await fileStream.CopyToAsync(outputStream);
 
                 return true;
             }

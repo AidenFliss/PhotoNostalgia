@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Windows.Forms;
+﻿#pragma warning disable CS8602
 
 namespace PhotoNostalgia.Forms
 {
@@ -11,19 +9,14 @@ namespace PhotoNostalgia.Forms
             InitializeComponent();
         }
 
-        MainForm mainWindow = null;
         public bool shouldRemoveSelf = true;
 
-        public void PictureViewer_LoadImage(string path, MainForm mainWindw)
+        public void PictureViewer_LoadImage(string path)
         {
-            if (mainWindw != null)
-            {
-                mainWindow = mainWindw;
-            }
             if (!String.IsNullOrEmpty(path))
             {
                 pictureDisplay1.ImageLocation = path;
-                this.Text = mainWindw.resourceManager.GetString("windowTitle") + " [" + Path.GetFileName(path) + "]";
+                this.Text = MainForm.Instance.resourceManager.GetString("windowTitle") + " [" + Path.GetFileName(path) + "]";
             }
             int length = pictureDisplay1.ImageLocation.Length;
             string noExt = pictureDisplay1.ImageLocation.Substring(0, length - 4);
@@ -40,9 +33,9 @@ namespace PhotoNostalgia.Forms
 
         private void PictureViewer_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (mainWindow != null && shouldRemoveSelf == true)
+            if (shouldRemoveSelf == true)
             {
-                mainWindow.NullifyPictureViewer(this);
+                MainForm.Instance.NullifyPictureViewer(this);
             }
         }
 
@@ -66,7 +59,7 @@ namespace PhotoNostalgia.Forms
 
         private void PictureViewer_Load(object sender, EventArgs e)
         {
-            if (mainWindow != null)
+            if (MainForm.Instance != null)
             {
                 int length = pictureDisplay1.ImageLocation.Length;
                 string path = Path.GetFileName(pictureDisplay1.ImageLocation);
@@ -91,8 +84,8 @@ namespace PhotoNostalgia.Forms
             if (tags.Length == 0)
             {
                 DialogResult result = MessageBox.Show(
-                    mainWindow.resourceManager.GetString("confirmRemove"),
-                    mainWindow.resourceManager.GetString("confirmRemoveTitle"),
+                    MainForm.Instance.resourceManager.GetString("confirmRemove"),
+                    MainForm.Instance.resourceManager.GetString("confirmRemoveTitle"),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question,
                     MessageBoxDefaultButton.Button2);
@@ -100,8 +93,8 @@ namespace PhotoNostalgia.Forms
                 {
                     MainForm.TagDatabase.Remove(Path.GetFileName(pictureDisplay1.ImageLocation));
                     MessageBox.Show(
-                        mainWindow.resourceManager.GetString("deleteNotif"),
-                        mainWindow.resourceManager.GetString("deleteNotifTitle"),
+                        MainForm.Instance.resourceManager.GetString("deleteNotif"),
+                        MainForm.Instance.resourceManager.GetString("deleteNotifTitle"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning,
                         MessageBoxDefaultButton.Button1);
@@ -110,8 +103,8 @@ namespace PhotoNostalgia.Forms
             else
             {
                 DialogResult result = MessageBox.Show(
-                    mainWindow.resourceManager.GetString("applyConfirm") + " " + tagBlob,
-                    mainWindow.resourceManager.GetString("applyConfirmTitle"),
+                    MainForm.Instance.resourceManager.GetString("applyConfirm") + " " + tagBlob,
+                    MainForm.Instance.resourceManager.GetString("applyConfirmTitle"),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question,
                     MessageBoxDefaultButton.Button2);
@@ -121,7 +114,7 @@ namespace PhotoNostalgia.Forms
                 }
             }
             MainForm.SaveDatabase();
-            mainWindow.UpdateTagButtons();
+            MainForm.Instance.UpdateTagButtons();
         }
     }
 }
