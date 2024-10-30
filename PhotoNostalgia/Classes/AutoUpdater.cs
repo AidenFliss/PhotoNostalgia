@@ -35,6 +35,17 @@ namespace PhotoNostalgia.Classes
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
+                    if (await UpdateDB())
+                    {
+                        MessageBox.Show(
+                            resourceManager.GetString("databaseSuccess"),
+                            resourceManager.GetString("databaseSuccessTitle"),
+                            MessageBoxButtons.OK,
+                          MessageBoxIcon.Information);
+
+                        MainForm.Instance.Restart();
+                    }
+
                     return false;
                 }
 
